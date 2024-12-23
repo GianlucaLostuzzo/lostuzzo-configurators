@@ -2,25 +2,14 @@ import prisma from "@/lib/db";
 import { toJson } from "@/lib/json";
 import { NextResponse } from "next/server";
 
-export async function GET(request: Request) {
-  const { searchParams } = new URL(request.url);
-  const carBrand = searchParams.get("carBrand");
-  const carModel = searchParams.get("carModel");
-
-  if (!carBrand || !carModel) {
-    return new NextResponse("Missing 'carBrand' or 'carModel' parameters", {
-      status: 400,
-    });
-  }
-
+export async function GET() {
   try {
-    const years = await prisma.epTrunkLiner.findMany({
-      where: { car_brand: carBrand, car_model: carModel },
-      select: { car_year: true },
-      distinct: ["car_year"],
+    const years = await prisma.epLubricatingOils.findMany({
+      select: { type: true },
+      distinct: ["type"],
     });
 
-    return new NextResponse(toJson(years.map((y) => y.car_year)), {
+    return new NextResponse(toJson(years.map((y) => y.type)), {
       headers: { "Content-Type": "application/json" },
     });
   } catch {

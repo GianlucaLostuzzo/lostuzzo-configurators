@@ -4,7 +4,7 @@ export interface ActionDefaultsProps {
   onReset?: () => void;
 }
 
-export default function ActionDefaults(props: ActionDefaultsProps) {
+export default function ActionsButtons(props: ActionDefaultsProps) {
   const { loading = false, onReset, disabled = false } = props;
 
   return (

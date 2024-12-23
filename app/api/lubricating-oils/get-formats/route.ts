@@ -26,11 +26,11 @@ export async function GET(request: Request) {
         ...(oemBrand && { oem_brand: oemBrand }),
         ...(oemCertify && { oem_certify: oemCertify }),
       },
-      select: { gradation: true },
-      distinct: ["gradation"],
+      select: { format: true },
+      distinct: ["format"],
     });
 
-    return new NextResponse(toJson(gradations.map((g) => g.gradation)), {
+    return new NextResponse(toJson(gradations.map((g) => g.format)), {
       headers: { "Content-Type": "application/json" },
     });
   } catch (error) {
