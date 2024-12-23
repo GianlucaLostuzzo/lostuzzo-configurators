@@ -1,0 +1,129 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model EpAutoMats {
+  auto_mats_id BigInt    @id @default(autoincrement()) // Primary key, autoincrement
+  brand        String    @db.VarChar(20) // VARCHAR(20)
+  model        String    @db.VarChar(40) // VARCHAR(40)
+  year         String    @db.VarChar(20) // VARCHAR(20)
+  type         String    @db.VarChar(20) // VARCHAR(20)
+  code         String    @db.VarChar(20) // VARCHAR(20)
+  date_created DateTime? // Nullable timestamp
+  date_updated DateTime? // Nullable timestamp
+
+  @@map("ep_auto_mats")
+}
+
+model EpBatteries {
+  batteries_id      BigInt    @id @default(autoincrement()) // Primary key
+  typology          String    @db.VarChar(255) // VARCHAR(255)
+  product_code      String    @db.VarChar(255) // VARCHAR(255)
+  cdalias           String?   @db.VarChar(255) // Nullable
+  size              String    @db.VarChar(255) // VARCHAR(255)
+  length            Decimal?  @db.Decimal(19, 5) // Numeric(19,5)
+  width             Decimal?  @db.Decimal(19, 5) // Numeric(19,5)
+  height            Decimal?  @db.Decimal(19, 5) // Numeric(19,5)
+  volt              Decimal?  @db.Decimal(19, 5) // Numeric(19,5)
+  ah                Decimal?  @db.Decimal(19, 5) // Numeric(19,5)
+  a_en              Decimal?  @db.Decimal(19, 5) // Numeric(19,5)
+  positive_polarity String?   @db.VarChar(10) // Nullable VARCHAR(10)
+  date_created      DateTime? // Nullable timestamp
+  date_updated      DateTime? // Nullable timestamp
+
+  @@map("ep_batteries")
+}
+
+model EpCarCovers {
+  car_covers_id BigInt    @id @default(autoincrement()) // Primary key
+  brand         String    @db.VarChar(40) // VARCHAR(40)
+  model         String    @db.VarChar(40) // VARCHAR(40)
+  code          String    @db.VarChar(20) // VARCHAR(20)
+  date_created  DateTime? // Nullable timestamp
+  date_updated  DateTime? // Nullable timestamp
+
+  @@map("ep_car_covers")
+}
+
+model EpCarTrunks {
+  car_trunks_id  BigInt    @id @default(autoincrement()) // Primary key
+  brand          String    @db.VarChar(20) // VARCHAR(20)
+  code           String    @db.VarChar(20) // VARCHAR(20)
+  capacity       String    @db.VarChar(20) // VARCHAR(20)
+  color          String    @db.VarChar(20) // VARCHAR(20)
+  double_opening String    @db.VarChar(10) // VARCHAR(10)
+  fixing_type    String    @db.VarChar(40) // VARCHAR(40)
+  date_created   DateTime? // Nullable timestamp
+  date_updated   DateTime? // Nullable timestamp
+
+  @@map("ep_car_trunks")
+}
+
+model EpLubricatingOils {
+  lubricating_oils_id BigInt    @id @default(autoincrement()) // Primary key
+  type                String?   @db.VarChar(255) // Nullable VARCHAR(255)
+  gradation           String?   @db.VarChar(255) // Nullable VARCHAR(255)
+  brand               String?   @db.VarChar(255) // Nullable VARCHAR(255)
+  format              String?   @db.VarChar(255) // Nullable VARCHAR(255)
+  specs               String?   @db.VarChar(255) // Nullable VARCHAR(255)
+  oem_brand           String?   @db.VarChar(255) // Nullable VARCHAR(255)
+  oem_certify         String?   @db.VarChar(255) // Nullable VARCHAR(255)
+  product_code        String    @db.VarChar(255) // NOT NULL VARCHAR(255)
+  date_created        DateTime? // Nullable timestamp
+  date_updated        DateTime? // Nullable timestamp
+  dsmarca             String?   @db.VarChar(40) // Nullable VARCHAR(40)
+
+  @@map("ep_lubricating_oils")
+}
+
+model EpRoofBars {
+  roof_bars_id BigInt    @id @default(autoincrement()) // Chiave primaria
+  manufacter   String    @db.VarChar(20) // NOT NULL VARCHAR(20)
+  brand        String    @db.VarChar(20) // NOT NULL VARCHAR(20)
+  model        String    @db.VarChar(255) // NOT NULL VARCHAR(255)
+  year         String    @db.VarChar(20) // NOT NULL VARCHAR(20)
+  type         String    @db.VarChar(255) // NOT NULL VARCHAR(255)
+  code         String    @db.VarChar(100) // NOT NULL VARCHAR(100)
+  date_created DateTime? // Nullable timestamp
+  date_updated DateTime? // Nullable timestamp
+
+  @@map("ep_roof_bars")
+}
+
+model EpSnowChains {
+  snow_chains_id BigInt    @id @default(autoincrement()) // Chiave primaria
+  diameter       String    @db.VarChar(10) // NOT NULL VARCHAR(10)
+  width          String    @db.VarChar(10) // NOT NULL VARCHAR(10)
+  ratio          String    @db.VarChar(10) // NOT NULL VARCHAR(10)
+  date_created   DateTime? // Nullable timestamp
+  date_updated   DateTime? // Nullable timestamp
+  product_code   String?   @db.VarChar(255) // Nullable VARCHAR(255)
+  typology       String?   @db.VarChar(255) // Nullable VARCHAR(255)
+
+  @@map("ep_snow_chains")
+}
+
+model EpTrunkLiner {
+  trunk_liner_id BigInt    @id @default(autoincrement()) // Chiave primaria
+  car_brand      String    @db.VarChar(255) // NOT NULL VARCHAR(255)
+  car_model      String    @db.VarChar(255) // NOT NULL VARCHAR(255)
+  car_year       String?   @db.VarChar(255) // Nullable VARCHAR(255)
+  cdalias        String?   @db.VarChar(255) // Nullable VARCHAR(255)
+  product_code   String    @db.VarChar(255) // NOT NULL VARCHAR(255)
+  brand          String?   @db.VarChar(255) // Nullable VARCHAR(255)
+  date_created   DateTime? // Nullable timestamp
+  date_updated   DateTime? // Nullable timestamp
+
+  @@map("ep_trunk_liner")
+}
