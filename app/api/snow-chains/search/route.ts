@@ -4,23 +4,27 @@ import { NextResponse } from "next/server";
 
 export async function GET(request: Request) {
   const { searchParams } = new URL(request.url);
-  const manufacterCar = searchParams.get("manufacterCar");
-  const brandCar = searchParams.get("brandCar");
-  const modelCar = searchParams.get("modelCar");
-  const yearCar = searchParams.get("yearCar");
+  const width = searchParams.get("width");
+  const ratio = searchParams.get("ratio");
+  const diameter = searchParams.get("diameter");
+  const typology = searchParams.get("typology");
+
+  if (!width) {
+    return new NextResponse("Missing 'width' parameter", { status: 400 });
+  }
 
   try {
-    const results = await prisma.epRoofBars.findMany({
+    const results = await prisma.epSnowChains.findMany({
       where: {
-        ...(manufacterCar && { manufacter: manufacterCar }),
-        ...(brandCar && { brand: brandCar }),
-        ...(modelCar && { model: modelCar }),
-        ...(yearCar && { year: yearCar }),
+        ...(width && { width }),
+        ...(ratio && { ratio }),
+        ...(diameter && { diameter }),
+        ...(typology && { typology }),
       },
-      select: { code: true },
+      select: { product_code: true },
     });
 
-    return new NextResponse(toJson(results.map((r) => r.code)), {
+    return new NextResponse(toJson(results.map((r) => r.product_code)), {
       headers: { "Content-Type": "application/json" },
     });
   } catch {

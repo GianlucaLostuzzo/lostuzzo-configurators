@@ -22,11 +22,21 @@ export async function GET(request: Request) {
   const widthToleranceDecimal = new Prisma.Decimal(Number(widthTolerance));
   const heightToleranceDecimal = new Prisma.Decimal(Number(heightTolerance));
 
+  let minimumAh = undefined;
+  let maximumAh = undefined;
+
+  if (ahInterval?.match(/^\d+-\d+$/)) {
+    [minimumAh, maximumAh] = ahInterval
+      ?.split("-")
+      .map((x) => new Prisma.Decimal(x));
+  }
+
   try {
     const results = await prisma.epBatteries.findMany({
       where: {
         ...(typology && { typology }),
-        ...(ahInterval && { ah: Number(ahInterval) }),
+        ...(minimumAh &&
+          maximumAh && { ah: { gte: minimumAh, lte: maximumAh } }),
         ...(length && {
           length: {
             lte: lengthDecimal.add(lengthToleranceDecimal),

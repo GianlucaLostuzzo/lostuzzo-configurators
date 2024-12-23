@@ -2,25 +2,14 @@ import prisma from "@/lib/db";
 import { toJson } from "@/lib/json";
 import { NextResponse } from "next/server";
 
-export async function GET(request: Request) {
-  const { searchParams } = new URL(request.url);
-  const manufacterCar = searchParams.get("manufacterCar");
-  const brandCar = searchParams.get("brandCar");
-  const modelCar = searchParams.get("modelCar");
-  const yearCar = searchParams.get("yearCar");
-
+export async function GET() {
   try {
-    const results = await prisma.epRoofBars.findMany({
-      where: {
-        ...(manufacterCar && { manufacter: manufacterCar }),
-        ...(brandCar && { brand: brandCar }),
-        ...(modelCar && { model: modelCar }),
-        ...(yearCar && { year: yearCar }),
-      },
-      select: { code: true },
+    const results = await prisma.epSnowChains.findMany({
+      distinct: ["width"],
+      select: { width: true },
     });
 
-    return new NextResponse(toJson(results.map((r) => r.code)), {
+    return new NextResponse(toJson(results.map((r) => r.width)), {
       headers: { "Content-Type": "application/json" },
     });
   } catch {

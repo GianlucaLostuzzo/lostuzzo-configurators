@@ -1,5 +1,8 @@
 import type { Metadata } from "next";
 import "./globals.css";
+import Menu from "@/components/Menu";
+import { BiBattery } from "react-icons/bi";
+import { BsSnow } from "react-icons/bs";
 
 export const metadata: Metadata = {
   title: "Create Next App",
@@ -13,7 +16,15 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={`antialiased`}>{children}</body>
+      <body className={`antialiased`}>
+        <Menu
+          entries={[
+            { label: "Batterie", href: "/batteries", icon: <BiBattery /> },
+            { label: "Catene da neve", href: "/snow-chains", icon: <BsSnow /> },
+          ]}
+        />
+        {children}
+      </body>
     </html>
   );
 }
