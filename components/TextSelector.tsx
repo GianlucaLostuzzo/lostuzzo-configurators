@@ -8,7 +8,7 @@ export interface TextSelectorProps {
   disabled?: boolean;
 }
 
-const isKeyValueArray = (e: any): e is { key: string; value: string }[] => {
+const isKeyValueArray = (e: unknown): e is { key: string; value: string }[] => {
   return (
     Array.isArray(e) && e.every((entry) => Object.keys(entry).includes("key"))
   );

@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { useMountQuery } from "@/hooks/useMountQuery";
 import TextSelector from "@/components/TextSelector";
 import PageTitle from "@/components/PageTitle";
@@ -119,7 +119,7 @@ export default function LubricatingOilsConfigurator() {
 
     const queryParams = new URLSearchParams(
       Object.entries(form)
-        .filter(([_, value]) => value)
+        .filter(([, value]) => value)
         .map(([key, value]) => [key, value === "all" ? "" : value])
     ).toString();
 
