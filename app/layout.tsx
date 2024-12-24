@@ -5,6 +5,7 @@ import { BiBattery, BiCar, BiHome, BiPackage } from "react-icons/bi";
 import { BsSnow, BsUmbrella } from "react-icons/bs";
 import { RiOilFill } from "react-icons/ri";
 import FadeIn from "@/components/FadeIn";
+import NotistackProvider from "@/components/NotistackProvider";
 
 export const metadata: Metadata = {
   title: "Configuratori Lostuzzo",
@@ -20,6 +21,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={`antialiased`}>
+        <NotistackProvider />
         <Menu
           entries={[
             { label: "Home", href: "/", icon: <BiHome /> },

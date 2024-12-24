@@ -1,4 +1,6 @@
-import { BiCheck } from "react-icons/bi";
+import { enqueueSnackbar } from "notistack";
+import { AiFillProduct } from "react-icons/ai";
+import { BiCheck, BiCode, BiCopy, BiInfoCircle } from "react-icons/bi";
 
 export interface ResultsSectionProps {
   results?: string[] | null;
@@ -12,6 +14,12 @@ export default function ResultsSection(props: ResultsSectionProps) {
     return <></>;
   }
 
+  const handleCopy = (code: string) => {
+    navigator.clipboard
+      .writeText(code)
+      .then(() => enqueueSnackbar("Codice copiato negli appunti"));
+  };
+
   return (
     <div className="mt-10">
       <h2 className="text-2xl font-bold text-center text-primary mb-6">
@@ -22,14 +30,21 @@ export default function ResultsSection(props: ResultsSectionProps) {
           {results.map((code, i) => (
             <div
               key={`result_${code}_${i}`}
-              className="bg-white shadow-md rounded-lg p-4 flex items-center justify-center transition-transform transform hover:scale-105 hover:shadow-lg border"
+              className="bg-white shadow-lg rounded-lg p-4 flex items-center transition-transform transform border"
             >
               <span className="text-3xl font-bold flex-grow-0">
-                <BiCheck />
+                <AiFillProduct />
               </span>
               <span className="text-lg font-medium text-gray-800 flex-grow text-center">
                 {code}
               </span>
+              <button
+                onClick={() => handleCopy(code)}
+                className="ml-4 text-gray-500 hover:text-primary focus:outline-none"
+                aria-label={`Copy code ${code}`}
+              >
+                <BiCopy size={24} />
+              </button>
             </div>
           ))}
         </div>
