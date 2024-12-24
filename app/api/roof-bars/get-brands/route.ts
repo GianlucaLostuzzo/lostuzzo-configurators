@@ -4,10 +4,13 @@ import { toJson } from "@/lib/json";
 
 export async function GET(request: Request) {
   const { searchParams } = new URL(request.url);
-  const manufacter = searchParams.get("manufacter");
+  const manufacter =
+    searchParams.get("manufacter") || searchParams.get("manufacturer");
 
   if (!manufacter) {
-    return new NextResponse("Missing 'manufacter' parameter", { status: 400 });
+    return new NextResponse("Missing 'manufacturer' parameter", {
+      status: 400,
+    });
   }
 
   try {

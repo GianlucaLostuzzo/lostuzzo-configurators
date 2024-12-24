@@ -5,7 +5,8 @@ import { NextResponse } from "next/server";
 export async function GET(request: Request) {
   const { searchParams } = new URL(request.url);
 
-  const manufacter = searchParams.get("manufacter");
+  const manufacter =
+    searchParams.get("manufacter") || searchParams.get("manufacturer");
   const brand = searchParams.get("brand");
   const model = searchParams.get("model");
 

@@ -4,11 +4,12 @@ import { NextResponse } from "next/server";
 
 export async function GET(request: Request) {
   const { searchParams } = new URL(request.url);
-  const manufacter = searchParams.get("manufacter");
+  const manufacter =
+    searchParams.get("manufacter") || searchParams.get("manufacturer");
   const brand = searchParams.get("brand");
 
   if (!manufacter || !brand) {
-    return new NextResponse("Missing 'manufacter' or 'brand' parameters", {
+    return new NextResponse("Missing 'manufacturer' or 'brand' parameters", {
       status: 400,
     });
   }

@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import "./globals.css";
 import Menu from "@/components/Menu";
-import { BiBattery, BiCar, BiHome } from "react-icons/bi";
+import { BiBattery, BiCar, BiHome, BiPackage } from "react-icons/bi";
 import { BsSnow, BsUmbrella } from "react-icons/bs";
 import { RiOilFill } from "react-icons/ri";
 import FadeIn from "@/components/FadeIn";
@@ -35,6 +35,11 @@ export default function RootLayout({
               label: "Oli lubrificanti",
               href: "/lubricating-oils",
               icon: <RiOilFill />,
+            },
+            {
+              label: "Portaggio e carico",
+              href: "/roof-bars",
+              icon: <BiPackage />,
             },
           ]}
         >
