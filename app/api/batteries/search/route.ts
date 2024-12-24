@@ -10,9 +10,12 @@ export async function GET(request: Request) {
   const length = searchParams.get("length");
   const width = searchParams.get("width");
   const height = searchParams.get("height");
-  const lengthTolerance = searchParams.get("lengthTolerance");
-  const widthTolerance = searchParams.get("widthTolerance");
-  const heightTolerance = searchParams.get("heightTolerance");
+  const lengthTolerance =
+    searchParams.get("lengthTolerance") || searchParams.get("lengthTollerance");
+  const widthTolerance =
+    searchParams.get("widthTolerance") || searchParams.get("widthTollerance");
+  const heightTolerance =
+    searchParams.get("heightTolerance") || searchParams.get("heightTollerance");
   const positivePolarity = searchParams.get("positivePolarity");
 
   const lengthDecimal = new Prisma.Decimal(Number(length));
@@ -31,12 +34,19 @@ export async function GET(request: Request) {
       .map((x) => new Prisma.Decimal(x));
   }
 
+  if (ahInterval?.match(/^\d+\+$/)) {
+    minimumAh = new Prisma.Decimal(ahInterval.slice(0, -1));
+  }
+
+  const hasAhInterval = minimumAh !== undefined && maximumAh !== undefined;
+  const hasAhLowerBound = minimumAh !== undefined && maximumAh === undefined;
+
   try {
     const results = await prisma.epBatteries.findMany({
       where: {
         ...(typology && { typology }),
-        ...(minimumAh &&
-          maximumAh && { ah: { gte: minimumAh, lte: maximumAh } }),
+        ...(hasAhInterval && { ah: { gte: minimumAh, lte: maximumAh } }),
+        ...(hasAhLowerBound && { ah: { gte: minimumAh } }),
         ...(length && {
           length: {
             lte: lengthDecimal.add(lengthToleranceDecimal),
