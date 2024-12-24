@@ -1,6 +1,6 @@
 import { enqueueSnackbar } from "notistack";
 import { AiFillProduct } from "react-icons/ai";
-import { BiCheck, BiCode, BiCopy, BiInfoCircle } from "react-icons/bi";
+import { BiCopy } from "react-icons/bi";
 
 export interface ResultsSectionProps {
   results?: string[] | null;
