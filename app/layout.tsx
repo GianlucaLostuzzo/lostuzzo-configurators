@@ -1,8 +1,8 @@
 import type { Metadata } from "next";
 import "./globals.css";
 import Menu from "@/components/Menu";
-import { BiBattery } from "react-icons/bi";
-import { BsSnow } from "react-icons/bs";
+import { BiBattery, BiCar, BiHome } from "react-icons/bi";
+import { BsSnow, BsUmbrella } from "react-icons/bs";
 import { RiOilFill } from "react-icons/ri";
 import FadeIn from "@/components/FadeIn";
 
@@ -22,16 +22,24 @@ export default function RootLayout({
       <body className={`antialiased`}>
         <Menu
           entries={[
+            { label: "Home", href: "/", icon: <BiHome /> },
             { label: "Batterie", href: "/batteries", icon: <BiBattery /> },
             { label: "Catene da neve", href: "/snow-chains", icon: <BsSnow /> },
+            { label: "Bauli per aiuto", href: "/car-trunks", icon: <BiCar /> },
+            {
+              label: "Teli copriauto",
+              href: "/car-covers",
+              icon: <BsUmbrella />,
+            },
             {
               label: "Oli lubrificanti",
               href: "/lubricating-oils",
               icon: <RiOilFill />,
             },
           ]}
-        />
-        <FadeIn>{children}</FadeIn>
+        >
+          <FadeIn>{children}</FadeIn>
+        </Menu>
       </body>
     </html>
   );

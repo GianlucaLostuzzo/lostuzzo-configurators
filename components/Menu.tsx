@@ -1,6 +1,9 @@
 "use client";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import React, { useState } from "react";
+import icon from "../app/icon-menu.png";
+import Image from "next/image";
 
 interface MenuEntry {
   label: string;
@@ -10,101 +13,102 @@ interface MenuEntry {
 
 interface MenuProps {
   entries: MenuEntry[];
+  children: React.ReactNode;
 }
 
-export default function Menu({ entries }: MenuProps) {
+export default function Menu({ entries, children }: MenuProps) {
   const [isOpen, setIsOpen] = useState(false);
+  const pathname = usePathname();
 
   return (
-    <nav className="bg-primary text-white mb-3">
-      {/* Desktop and Hamburger Container */}
-      <div className="mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex items-center justify-between h-16">
-          {/* Logo Placeholder */}
-          <div className="flex-shrink-0">
-            <a href="/" className="text-xl font-bold text-white">
-              Configuratori
-            </a>
-          </div>
-
-          {/* Desktop Menu */}
-          <div className="hidden md:flex space-x-4">
-            {entries.map((entry) => (
-              <Link
-                key={entry.href}
-                href={entry.href}
-                className="hover:bg-gray-700 px-3 py-2 rounded-md text-lg font-medium flex flex-row items-center gap-2"
-              >
-                {entry.icon && entry.icon}
-                {entry.label}
-              </Link>
-            ))}
-          </div>
-
-          {/* Hamburger Menu Button */}
-          <div className="md:hidden">
-            <button
-              onClick={() => setIsOpen(!isOpen)}
-              type="button"
-              className="inline-flex items-center justify-center p-2 rounded-md text-gray-400 hover:text-white hover:bg-gray-700 focus:outline-none"
-              aria-controls="mobile-menu"
-              aria-expanded={isOpen}
+    <div className="flex">
+      {/* Drawer (toggleable on all viewports) */}
+      <div
+        className={`fixed top-0 left-0 h-full bg-primary text-white w-64 transform ${
+          isOpen ? "translate-x-0" : "-translate-x-full"
+        } transition-transform duration-300 ease-in-out z-50`}
+      >
+        <div className="px-4 py-4 flex justify-between items-center">
+          <span className="text-lg font-bold">Menu</span>
+          <button
+            onClick={() => setIsOpen(false)}
+            className="text-gray-400 hover:text-white"
+          >
+            <svg
+              className="h-6 w-6"
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
             >
-              <span className="sr-only">Open main menu</span>
-              {isOpen ? (
-                <svg
-                  className="block h-6 w-6"
-                  xmlns="http://www.w3.org/2000/svg"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke="currentColor"
-                  aria-hidden="true"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth="2"
-                    d="M6 18L18 6M6 6l12 12"
-                  />
-                </svg>
-              ) : (
-                <svg
-                  className="block h-6 w-6"
-                  xmlns="http://www.w3.org/2000/svg"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke="currentColor"
-                  aria-hidden="true"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth="2"
-                    d="M4 6h16M4 12h16M4 18h16"
-                  />
-                </svg>
-              )}
-            </button>
-          </div>
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth="2"
+                d="M6 18L18 6M6 6l12 12"
+              />
+            </svg>
+          </button>
+        </div>
+        <div className="px-4 space-y-4 mt-4">
+          {entries.map((entry) => (
+            <Link
+              key={entry.href}
+              href={entry.href}
+              onClick={() => setIsOpen(false)}
+              className={`px-3 py-2 rounded-md flex flex-row gap-5 items-center text-base font-medium transition-all duration-200 ${
+                pathname === entry.href
+                  ? "bg-gray-700 text-white"
+                  : "text-gray-300 hover:bg-gray-700 hover:text-white"
+              }`}
+            >
+              <span className="text-xl">{entry.icon && entry.icon}</span>
+              {entry.label}
+            </Link>
+          ))}
         </div>
       </div>
 
-      {/* Mobile Menu */}
+      {/* Backdrop */}
       {isOpen && (
-        <div className="md:hidden" id="mobile-menu">
-          <div className="px-2 pt-2 pb-3 space-y-1 sm:px-3">
-            {entries.map((entry) => (
-              <Link
-                key={entry.href}
-                href={entry.href}
-                className="block px-3 py-2 rounded-md text-base font-medium hover:bg-gray-700"
-              >
-                {entry.label}
-              </Link>
-            ))}
-          </div>
-        </div>
+        <div
+          className="fixed inset-0 bg-black opacity-50 z-40"
+          onClick={() => setIsOpen(false)}
+        ></div>
       )}
-    </nav>
+
+      {/* Main Content */}
+      <div className="flex-1">
+        <div className="bg-primary text-white h-16 flex items-center justify-between px-4">
+          {/* Toggle Button */}
+          <button
+            onClick={() => setIsOpen(true)}
+            className="text-gray-400 hover:text-white"
+          >
+            <svg
+              className="h-6 w-6"
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth="2"
+                d="M4 6h16M4 12h16M4 18h16"
+              />
+            </svg>
+          </button>
+          <span className="text-xl font-bold">
+            <Image src={icon} alt="Icon" width={32} height={32} />
+          </span>
+        </div>
+        <div className="p-4">
+          {/* Main Content Goes Here */}
+          {children}
+        </div>
+      </div>
+    </div>
   );
 }

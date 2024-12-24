@@ -2,6 +2,8 @@
 import ActionButtons from "@/components/ActionButtons";
 import NumericSelector from "@/components/NumericSelector";
 import PageTitle from "@/components/PageTitle";
+import ResultsSection from "@/components/ResultsSection";
+import TextSelector from "@/components/TextSelector";
 import { useMountQuery } from "@/hooks/useMountQuery";
 import { useState } from "react";
 
@@ -50,7 +52,7 @@ export default function Configurator() {
   const { data: typologies } = useMountQuery(
     "/api/batteries/get-all-typologies"
   );
-  const [results, setResults] = useState<string[]>([]);
+  const [results, setResults] = useState<string[] | null>(null);
   const [loading, setLoading] = useState(false);
 
   // Handle form changes
@@ -64,7 +66,7 @@ export default function Configurator() {
   // Reset form
   const resetFilters = () => {
     setForm(defaultState);
-    setResults([]);
+    setResults(null);
   };
 
   // Handle form submission
@@ -89,34 +91,18 @@ export default function Configurator() {
 
   return (
     <div className="container mx-auto p-6 max-w-4xl">
-      <PageTitle>Configuratore Batterie</PageTitle>
+      <PageTitle>Batterie</PageTitle>
 
       <form onSubmit={handleSubmit} className="space-y-8">
         <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
-          <div className="flex flex-col">
-            <label
-              htmlFor="typology"
-              className="block text-lg font-medium  mb-2"
-            >
-              Tipologia
-            </label>
-            <select
-              id="typology"
-              name="typology"
-              value={form.typology}
-              onChange={handleChange}
-              className="rounded-lg border border-gray-300 shadow-sm focus:ring-indigo-500 focus:border-indigo-500 p-2"
-            >
-              <option value="" disabled>
-                Seleziona tipologia
-              </option>
-              {typologies.map((typology) => (
-                <option key={typology} value={typology}>
-                  {typology}
-                </option>
-              ))}
-            </select>
-          </div>
+          <TextSelector
+            id="typology"
+            label="Tipologia"
+            onChange={handleChange}
+            value={form.typology}
+            options={typologies}
+            disabledOptionText="Seleziona tipologia"
+          />
         </div>
 
         {/* Dimension Inputs */}
@@ -230,26 +216,7 @@ export default function Configurator() {
       </form>
 
       {/* Results */}
-      <div className="mt-10">
-        <h2 className="text-2xl font-bold text-center text-primary mb-6">
-          Risultati
-        </h2>
-        {results.length > 0 ? (
-          <ul className="mt-4 list-disc pl-10 space-y-2 ">
-            {results.map((code) => (
-              <li key={code} className="text-lg">
-                {code}
-              </li>
-            ))}
-          </ul>
-        ) : (
-          !loading && (
-            <p className="mt-4 text-gray-500 text-center text-lg">
-              Nessun risultato trovato.
-            </p>
-          )
-        )}
-      </div>
+      <ResultsSection results={results} loading={loading} />
     </div>
   );
 }

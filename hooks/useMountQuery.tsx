@@ -7,6 +7,8 @@ export const useMountQuery = (
   const [isLoading, setIsLoading] = useState(true);
   const [data, setData] = useState<string[]>([]);
 
+  const queryJson = JSON.stringify(query);
+
   useEffect(() => {
     const abort = new AbortController();
 
@@ -23,28 +25,36 @@ export const useMountQuery = (
             signal: abort.signal,
           }
         );
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
         return response.json();
       } catch (e) {
         if (e instanceof Error && e.name === "AbortError") {
-          return undefined;
+          return undefined; // Request was aborted
         } else {
           throw e;
         }
       }
     };
 
-    fetchFunction().then((data) => {
-      setIsLoading(!data);
-      if (data) {
-        setData(data);
-      }
-    });
+    fetchFunction()
+      .then((data) => {
+        setIsLoading(false);
+        if (data) {
+          setData(data);
+        }
+      })
+      .catch((e) => {
+        console.error("Error fetching data:", e);
+        setIsLoading(false);
+      });
 
     return () => {
       abort.abort();
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [queryJson, endpoint]);
 
   return { data, isLoading };
 };
