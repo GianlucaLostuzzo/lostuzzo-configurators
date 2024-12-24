@@ -3,6 +3,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import React, { useState } from "react";
 import icon from "../app/icon-menu.png";
+import iconCdr from "../app/icon-cidierre.png";
 import Image from "next/image";
 
 interface MenuEntry {
@@ -100,7 +101,8 @@ export default function Menu({ entries, children }: MenuProps) {
               />
             </svg>
           </button>
-          <span className="text-xl font-bold">
+          <span className="text-xl font-bold flex flex-row gap-5">
+            <Image src={iconCdr} alt="Icon" width={40} height={40} />
             <Image src={icon} alt="Icon" width={32} height={32} />
           </span>
         </div>

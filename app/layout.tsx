@@ -1,11 +1,9 @@
 import type { Metadata } from "next";
 import "./globals.css";
 import Menu from "@/components/Menu";
-import { BiBattery, BiCar, BiHome, BiPackage } from "react-icons/bi";
-import { BsSnow, BsUmbrella } from "react-icons/bs";
-import { RiOilFill } from "react-icons/ri";
 import FadeIn from "@/components/FadeIn";
 import NotistackProvider from "@/components/NotistackProvider";
+import { menuEntries } from "@/data/menu";
 
 export const metadata: Metadata = {
   title: "Configuratori Lostuzzo",
@@ -22,29 +20,7 @@ export default function RootLayout({
     <html lang="en">
       <body className={`antialiased`}>
         <NotistackProvider />
-        <Menu
-          entries={[
-            { label: "Home", href: "/", icon: <BiHome /> },
-            { label: "Batterie", href: "/batteries", icon: <BiBattery /> },
-            { label: "Catene da neve", href: "/snow-chains", icon: <BsSnow /> },
-            { label: "Bauli per aiuto", href: "/car-trunks", icon: <BiCar /> },
-            {
-              label: "Teli copriauto",
-              href: "/car-covers",
-              icon: <BsUmbrella />,
-            },
-            {
-              label: "Oli lubrificanti",
-              href: "/lubricating-oils",
-              icon: <RiOilFill />,
-            },
-            {
-              label: "Portaggio e carico",
-              href: "/roof-bars",
-              icon: <BiPackage />,
-            },
-          ]}
-        >
+        <Menu entries={menuEntries}>
           <FadeIn>{children}</FadeIn>
         </Menu>
       </body>

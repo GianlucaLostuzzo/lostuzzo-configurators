@@ -10,10 +10,14 @@ export async function GET(request: Request) {
   const yearCar = searchParams.get("yearCar");
   const typeMat = searchParams.get("typeMat");
 
+  if (!brandCar) {
+    return new NextResponse("Missing 'brandCar' parameter", { status: 400 });
+  }
+
   try {
     const results = await prisma.epAutoMats.findMany({
       where: {
-        ...(brandCar && { brand: brandCar }),
+        brand: brandCar,
         ...(modelCar && { model: modelCar }),
         ...(yearCar && { year: yearCar }),
         ...(typeMat && { type: typeMat }),
