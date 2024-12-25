@@ -23,7 +23,6 @@ export default function Menu({ entries, children }: MenuProps) {
 
   return (
     <div className="flex">
-      {/* Drawer (toggleable on all viewports) */}
       <div
         className={`fixed top-0 left-0 h-full bg-primary text-white w-64 transform ${
           isOpen ? "translate-x-0" : "-translate-x-full"
@@ -70,18 +69,15 @@ export default function Menu({ entries, children }: MenuProps) {
         </div>
       </div>
 
-      {/* Backdrop */}
       {isOpen && (
         <div
           className="fixed inset-0 bg-black opacity-50 z-40"
           onClick={() => setIsOpen(false)}
-        ></div>
+        />
       )}
 
-      {/* Main Content */}
       <div className="flex-1">
         <div className="bg-primary text-white h-16 flex items-center justify-between px-4">
-          {/* Toggle Button */}
           <button
             onClick={() => setIsOpen(true)}
             className="text-gray-400 hover:text-white"
@@ -106,10 +102,7 @@ export default function Menu({ entries, children }: MenuProps) {
             <Image src={icon} alt="Icon" width={32} height={32} />
           </span>
         </div>
-        <div className="p-4">
-          {/* Main Content Goes Here */}
-          {children}
-        </div>
+        <div className="p-4">{children}</div>
       </div>
     </div>
   );

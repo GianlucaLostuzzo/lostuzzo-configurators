@@ -9,6 +9,12 @@ export const metadata: Metadata = {
   title: "Configuratori Lostuzzo",
   description:
     "Configuratori per batterie, catene da neve, oli lubrificanti e altro",
+  openGraph: {
+    title: "Configuratori Lostuzzo",
+    description:
+      "Configuratori per batterie, catene da neve, oli lubrificanti e altro",
+    images: "/icon.png",
+  },
 };
 
 export default function RootLayout({
@@ -19,10 +25,10 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={`antialiased`}>
-        <NotistackProvider />
         <Menu entries={menuEntries}>
           <FadeIn>{children}</FadeIn>
         </Menu>
+        <NotistackProvider />
       </body>
     </html>
   );

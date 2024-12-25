@@ -6,7 +6,7 @@ export default function FadeIn({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
 
   return (
-    <div className="fade-in" key={pathname}>
+    <div className="animate-fade-in" key={pathname}>
       {children}
     </div>
   );

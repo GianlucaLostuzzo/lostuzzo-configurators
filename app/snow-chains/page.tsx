@@ -173,7 +173,6 @@ export default function SnowChainsConfigurator() {
         />
       </form>
 
-      {/* Results */}
       <ResultsSection results={results} loading={loading} />
     </div>
   );

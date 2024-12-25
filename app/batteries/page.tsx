@@ -5,7 +5,7 @@ import PageTitle from "@/components/PageTitle";
 import ResultsSection from "@/components/ResultsSection";
 import TextSelector from "@/components/TextSelector";
 import { useMountQuery } from "@/hooks/useMountQuery";
-import { useState } from "react";
+import { useCallback, useMemo, useState } from "react";
 
 const amperesOptions = [
   "0-9",
@@ -56,18 +56,42 @@ export default function Configurator() {
   const [loading, setLoading] = useState(false);
 
   // Handle form changes
-  const handleChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
-  ) => {
-    const { name, value } = e.target;
-    setForm((prev) => ({ ...prev, [name]: value }));
-  };
+  const handleChange = useCallback(
+    (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
+      const { name, value } = e.target;
+      if (
+        name === "length" ||
+        name === "width" ||
+        name === "height" ||
+        name === "lengthTolerance" ||
+        name === "widthTolerance" ||
+        name === "heightTolerance"
+      ) {
+        // Remove non-numeric characters
+        const parsedValue = value.replace(/\D/g, "");
+        setForm((prev) => ({ ...prev, [name]: parsedValue }));
+        return;
+      }
+      setForm((prev) => ({ ...prev, [name]: value }));
+    },
+    []
+  );
 
   // Reset form
   const resetFilters = () => {
     setForm(defaultState);
     setResults(null);
   };
+
+  const searchDisabled = useMemo(() => {
+    return (
+      !form.length ||
+      !form.width ||
+      !form.height ||
+      !form.ahInterval ||
+      !form.typology
+    );
+  }, [form]);
 
   // Handle form submission
   const handleSubmit = async (e: React.FormEvent) => {
@@ -111,7 +135,7 @@ export default function Configurator() {
             id={"length"}
             key={"length"}
             label="Lunghezza (mm)"
-            value={form["length"] as number}
+            value={form.length}
             onChange={handleChange}
           />
 
@@ -119,7 +143,7 @@ export default function Configurator() {
             id={"width"}
             key={"width"}
             label="Larghezza (mm)"
-            value={form["width"] as number}
+            value={form.width}
             onChange={handleChange}
           />
 
@@ -127,7 +151,7 @@ export default function Configurator() {
             id={"height"}
             key={"height"}
             label="Altezza (mm)"
-            value={form["height"] as number}
+            value={form.height}
             onChange={handleChange}
           />
 
@@ -135,7 +159,7 @@ export default function Configurator() {
             id={"lengthTolerance"}
             key={"lengthTolerance"}
             label={`Tolleranza ± Lungh. (mm)`}
-            value={form["lengthTolerance"] as number}
+            value={form.lengthTolerance}
             onChange={handleChange}
           />
 
@@ -143,7 +167,7 @@ export default function Configurator() {
             id={"widthTolerance"}
             key={"widthTolerance"}
             label={`Tolleranza ± Larg. (mm)`}
-            value={form["widthTolerance"] as number}
+            value={form.widthTolerance}
             onChange={handleChange}
           />
 
@@ -151,12 +175,11 @@ export default function Configurator() {
             id={"heightTolerance"}
             key={"heightTolerance"}
             label={`Tolleranza ± Alt. (mm)`}
-            value={form["heightTolerance"] as number}
+            value={form.heightTolerance}
             onChange={handleChange}
           />
         </div>
 
-        {/* Positive Polarity */}
         <div className="flex flex-col">
           <label
             htmlFor="positivePolarity"
@@ -186,33 +209,21 @@ export default function Configurator() {
         </div>
 
         {/* Amperes Interval */}
-        <div className="flex flex-col">
-          <label
-            htmlFor="ahInterval"
-            className="block text-lg font-medium  mb-2"
-          >
-            Ampere
-          </label>
-          <select
-            id="ahInterval"
-            name="ahInterval"
-            value={form.ahInterval}
-            onChange={handleChange}
-            className="rounded-lg border border-gray-300 shadow-sm focus:ring-indigo-500 focus:border-indigo-500 p-2"
-          >
-            <option value="" disabled>
-              Seleziona intervallo
-            </option>
-            {amperesOptions.map((interval) => (
-              <option key={interval} value={interval}>
-                {interval}
-              </option>
-            ))}
-          </select>
-        </div>
+        <TextSelector
+          id="ahInterval"
+          label="Ampere"
+          value={form.ahInterval}
+          onChange={handleChange}
+          options={amperesOptions}
+          disabledOptionText="Seleziona intervallo"
+        />
 
         {/* Action Buttons */}
-        <ActionButtons loading={loading} onReset={resetFilters} />
+        <ActionButtons
+          loading={loading}
+          onReset={resetFilters}
+          disabled={searchDisabled}
+        />
       </form>
 
       {/* Results */}

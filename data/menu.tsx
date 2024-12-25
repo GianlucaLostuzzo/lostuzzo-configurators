@@ -5,10 +5,26 @@ import { PiRug } from "react-icons/pi";
 import { GoContainer } from "react-icons/go";
 
 export const menuEntries = [
-  { label: "Home", href: "/", icon: <BiHome /> },
-  { label: "Batterie", href: "/batteries", icon: <BiBattery /> },
-  { label: "Catene da neve", href: "/snow-chains", icon: <BsSnow /> },
-  { label: "Bauli per auto", href: "/car-trunks", icon: <BiCar /> },
+  {
+    label: "Home",
+    href: "/",
+    icon: <BiHome />,
+  },
+  {
+    label: "Batterie",
+    href: "/batteries",
+    icon: <BiBattery />,
+  },
+  {
+    label: "Catene da neve",
+    href: "/snow-chains",
+    icon: <BsSnow />,
+  },
+  {
+    label: "Bauli per auto",
+    href: "/car-trunks",
+    icon: <BiCar />,
+  },
   {
     label: "Teli copriauto",
     href: "/car-covers",

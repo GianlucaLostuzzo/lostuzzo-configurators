@@ -7,13 +7,12 @@ export const useMountQuery = (
   const [isLoading, setIsLoading] = useState(true);
   const [data, setData] = useState<string[]>([]);
 
-  const queryJson = JSON.stringify(query);
+  const queryParams = new URLSearchParams(query).toString();
 
   useEffect(() => {
     const abort = new AbortController();
 
     const fetchFunction = async () => {
-      const queryParams = new URLSearchParams(query).toString();
       try {
         const response = await fetch(
           `${endpoint}${queryParams && `?${queryParams}`}`,
@@ -53,8 +52,7 @@ export const useMountQuery = (
     return () => {
       abort.abort();
     };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [queryJson, endpoint]);
+  }, [queryParams, endpoint]);
 
   return { data, isLoading };
 };
