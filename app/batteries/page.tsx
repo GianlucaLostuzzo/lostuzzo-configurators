@@ -84,13 +84,7 @@ export default function Configurator() {
   };
 
   const searchDisabled = useMemo(() => {
-    return (
-      !form.length ||
-      !form.width ||
-      !form.height ||
-      !form.ahInterval ||
-      !form.typology
-    );
+    return !form.length || !form.width || !form.height || !form.typology;
   }, [form]);
 
   // Handle form submission

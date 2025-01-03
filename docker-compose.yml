@@ -5,26 +5,13 @@ services:
       - pgdata:/var/lib/postgresql/data
       - ./dumps:/tmp
     ports:
-      - "7899:5432"
+      - "5432:5432"
     restart: always
     environment:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: pass
       POSTGRES_DB: lostuzzo
     
-  pgadmin:
-    image: dpage/pgadmin4
-    restart: "no"
-    ports:
-      # add variable in .env to change port
-      - "${PG_ADMIN_PORT:-8083}:80"
-    environment:
-      PGADMIN_DEFAULT_EMAIL: db@easymotion.devlocal
-      PGADMIN_DEFAULT_PASSWORD: 1234
-    volumes:
-      - pgadmin_data:/var/lib/pgadmin
-
 volumes:
   pgdata:
-  pgadmin_data:
 
