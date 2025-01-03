@@ -51,24 +51,27 @@ export async function GET(request: Request) {
         typology,
         ...(hasAhInterval && { ah: { gte: minimumAh, lte: maximumAh } }),
         ...(hasAhLowerBound && { ah: { gte: minimumAh } }),
-        ...(length && {
-          length: {
-            lte: lengthDecimal.add(lengthToleranceDecimal),
-            gte: lengthDecimal.sub(lengthToleranceDecimal),
-          },
-        }),
-        ...(width && {
-          width: {
-            lte: widthDecimal.add(widthToleranceDecimal),
-            gte: widthDecimal.sub(widthToleranceDecimal),
-          },
-        }),
-        ...(height && {
-          height: {
-            lte: heightDecimal.add(heightToleranceDecimal),
-            gte: heightDecimal.sub(heightToleranceDecimal),
-          },
-        }),
+        ...(length &&
+          length != "0" && {
+            length: {
+              lte: lengthDecimal.add(lengthToleranceDecimal),
+              gte: lengthDecimal.sub(lengthToleranceDecimal),
+            },
+          }),
+        ...(width &&
+          width != "0" && {
+            width: {
+              lte: widthDecimal.add(widthToleranceDecimal),
+              gte: widthDecimal.sub(widthToleranceDecimal),
+            },
+          }),
+        ...(height &&
+          height != "0" && {
+            height: {
+              lte: heightDecimal.add(heightToleranceDecimal),
+              gte: heightDecimal.sub(heightToleranceDecimal),
+            },
+          }),
         ...(positivePolarity && { positive_polarity: positivePolarity }),
       },
       select: { product_code: true },
