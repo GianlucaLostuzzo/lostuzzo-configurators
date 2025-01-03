@@ -83,9 +83,7 @@ export default function Configurator() {
     setResults(null);
   };
 
-  const searchDisabled = useMemo(() => {
-    return !form.length || !form.width || !form.height || !form.typology;
-  }, [form]);
+  const searchDisabled = useMemo(() => !form.typology, [form]);
 
   // Handle form submission
   const handleSubmit = async (e: React.FormEvent) => {

@@ -25,6 +25,10 @@ export async function GET(request: Request) {
   const widthToleranceDecimal = new Prisma.Decimal(Number(widthTolerance));
   const heightToleranceDecimal = new Prisma.Decimal(Number(heightTolerance));
 
+  if (!typology) {
+    return new NextResponse("Missing 'typology' parameter", { status: 400 });
+  }
+
   let minimumAh = undefined;
   let maximumAh = undefined;
 
@@ -44,7 +48,7 @@ export async function GET(request: Request) {
   try {
     const results = await prisma.epBatteries.findMany({
       where: {
-        ...(typology && { typology }),
+        typology,
         ...(hasAhInterval && { ah: { gte: minimumAh, lte: maximumAh } }),
         ...(hasAhLowerBound && { ah: { gte: minimumAh } }),
         ...(length && {
