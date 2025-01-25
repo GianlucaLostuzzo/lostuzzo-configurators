@@ -179,7 +179,11 @@ export default function CarTrunksConfigurator() {
         <ActionsButtons loading={loading} onReset={resetAll} />
       </form>
 
-      <ResultsSection results={results} loading={loading} />
+      <ResultsSection
+        results={results}
+        loading={loading}
+        imageBasePath="ep_car_trunks"
+      />
     </div>
   );
 }

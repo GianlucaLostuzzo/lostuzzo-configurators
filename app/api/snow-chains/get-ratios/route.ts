@@ -15,6 +15,7 @@ export async function GET(request: Request) {
       where: { width },
       select: { ratio: true },
       distinct: ["ratio"],
+      orderBy: { ratio: "asc" },
     });
 
     return new NextResponse(toJson(ratios.map((r) => r.ratio)), {

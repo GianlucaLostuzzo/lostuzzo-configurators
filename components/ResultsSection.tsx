@@ -1,14 +1,19 @@
 import { enqueueSnackbar } from "notistack";
-import { AiFillProduct } from "react-icons/ai";
 import { BiCopy } from "react-icons/bi";
+import { useState } from "react";
+import ImageWithFallback from "./ImageWithFallback";
+
+const STATIC_URL = process.env.NEXT_PUBLIC_STATIC_URL;
 
 export interface ResultsSectionProps {
   results?: string[] | null;
   loading?: boolean;
+  imageBasePath?: string;
 }
 
 export default function ResultsSection(props: ResultsSectionProps) {
-  const { loading = false, results } = props;
+  const { loading = false, results, imageBasePath = "" } = props;
+  const [visibleCount, setVisibleCount] = useState(10);
 
   if (!results) {
     return <></>;
@@ -20,34 +25,55 @@ export default function ResultsSection(props: ResultsSectionProps) {
       .then(() => enqueueSnackbar("Codice copiato negli appunti"));
   };
 
+  const handleLoadMore = () => {
+    setVisibleCount((prev) => prev + 10);
+  };
+
   return (
     <div className="mt-10">
       <h2 className="text-2xl font-bold text-center text-primary mb-6">
         Risultati
       </h2>
       {results.length > 0 ? (
-        <div className="mt-4 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-          {results.map((code, i) => (
-            <div
-              key={`result_${code}_${i}`}
-              className="bg-white shadow-lg rounded-lg p-4 flex items-center transition-transform transform border"
-            >
-              <span className="text-3xl font-bold flex-grow-0">
-                <AiFillProduct />
-              </span>
-              <span className="text-lg font-medium text-gray-800 flex-grow text-center">
-                {code}
-              </span>
-              <button
-                onClick={() => handleCopy(code)}
-                className="ml-4 text-gray-500 hover:text-primary focus:outline-none"
-                aria-label={`Copy code ${code}`}
+        <>
+          <div className="mt-4 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {results.slice(0, visibleCount).map((code, i) => (
+              <div
+                key={`result_${code}_${i}`}
+                className="bg-white shadow-lg rounded-lg overflow-hidden transition-transform transform border hover:scale-105"
               >
-                <BiCopy size={24} />
+                <div className="w-full h-48 relative flex">
+                  <ImageWithFallback
+                    href={`${STATIC_URL}/${imageBasePath}/${code}.jpg`}
+                  />
+                </div>
+                <div className="p-4 text-center">
+                  <span className="block text-lg font-medium text-gray-800 mb-2">
+                    {code}
+                  </span>
+                  <button
+                    onClick={() => handleCopy(code)}
+                    className="text-gray-500 hover:text-primary focus:outline-none flex items-center justify-center gap-2 border px-4 py-2 rounded-md w-full"
+                    aria-label={`Copy code ${code}`}
+                  >
+                    <BiCopy size={20} />
+                    Copia codice
+                  </button>
+                </div>
+              </div>
+            ))}
+          </div>
+          {visibleCount < results.length && (
+            <div className="flex justify-center mt-6">
+              <button
+                onClick={handleLoadMore}
+                className="px-6 py-2 bg-primary text-white rounded-md hover:bg-primary-dark focus:outline-none"
+              >
+                Carica di più
               </button>
             </div>
-          ))}
-        </div>
+          )}
+        </>
       ) : !loading ? (
         <p className="mt-4 text-gray-500 text-center text-lg">
           Nessun risultato trovato

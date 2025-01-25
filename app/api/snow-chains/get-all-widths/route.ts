@@ -7,6 +7,7 @@ export async function GET() {
     const results = await prisma.epSnowChains.findMany({
       distinct: ["width"],
       select: { width: true },
+      orderBy: { width: "asc" },
     });
 
     return new NextResponse(toJson(results.map((r) => r.width)), {

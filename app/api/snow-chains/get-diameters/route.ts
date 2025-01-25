@@ -18,6 +18,7 @@ export async function GET(request: Request) {
       where: { width, ratio },
       select: { diameter: true },
       distinct: ["diameter"],
+      orderBy: { diameter: "asc" },
     });
 
     return new NextResponse(toJson(diameters.map((d) => d.diameter)), {

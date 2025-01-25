@@ -20,6 +20,7 @@ export async function GET(request: Request) {
       where: { width, ratio, diameter },
       select: { typology: true },
       distinct: ["typology"],
+      orderBy: { typology: "asc" },
     });
 
     return new NextResponse(toJson(typologies.map((t) => t.typology)), {

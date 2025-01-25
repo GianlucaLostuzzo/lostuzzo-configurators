@@ -7,6 +7,7 @@ export async function GET() {
     const diameters = await prisma.epSnowChains.findMany({
       select: { diameter: true },
       distinct: ["diameter"],
+      orderBy: { diameter: "asc" },
     });
 
     return new NextResponse(toJson(diameters.map((d) => d.diameter)), {

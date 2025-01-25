@@ -148,7 +148,11 @@ export default function TrunkLinersConfigurator() {
         />
       </form>
 
-      <ResultsSection results={results} loading={loading} />
+      <ResultsSection
+        results={results}
+        loading={loading}
+        imageBasePath="ep_trunk_liners"
+      />
     </div>
   );
 }

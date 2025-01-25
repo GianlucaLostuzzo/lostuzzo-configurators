@@ -7,6 +7,7 @@ export async function GET() {
     const ratios = await prisma.epSnowChains.findMany({
       select: { ratio: true },
       distinct: ["ratio"],
+      orderBy: { ratio: "asc" },
     });
 
     return new NextResponse(toJson(ratios.map((r) => r.ratio)), {

@@ -173,7 +173,11 @@ export default function SnowChainsConfigurator() {
         />
       </form>
 
-      <ResultsSection results={results} loading={loading} />
+      <ResultsSection
+        results={results}
+        loading={loading}
+        imageBasePath="ep_snow_chains"
+      />
     </div>
   );
 }
