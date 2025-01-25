@@ -1,7 +1,7 @@
 import { enqueueSnackbar } from "notistack";
 import { BiCopy } from "react-icons/bi";
 import { useState } from "react";
-import ImageWithFallback from "./ImageWithFallback";
+import ImageWithFallback from "./image-with-fallback";
 
 const STATIC_URL = process.env.NEXT_PUBLIC_STATIC_URL;
 

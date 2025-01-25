@@ -1,11 +1,11 @@
 "use client";
 
 import { useCallback, useEffect, useState } from "react";
-import { useMountQuery } from "@/hooks/useMountQuery";
-import ActionButtons from "@/components/ActionButtons";
-import PageTitle from "@/components/PageTitle";
-import ResultsSection from "@/components/ResultsSection";
-import TextSelector from "@/components/TextSelector";
+import { useMountQuery } from "@/hooks/use-mount-query";
+import ActionButtons from "@/components/action-button";
+import PageTitle from "@/components/page-title";
+import ResultsSection from "@/components/results-section";
+import TextSelector from "@/components/text-selector";
 
 export default function SnowChainsConfigurator() {
   const [form, setForm] = useState({

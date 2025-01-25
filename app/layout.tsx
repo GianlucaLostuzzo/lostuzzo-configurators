@@ -1,9 +1,10 @@
 import type { Metadata } from "next";
 import "./globals.css";
-import Menu from "@/components/Menu";
-import FadeIn from "@/components/FadeIn";
-import NotistackProvider from "@/components/NotistackProvider";
+import FadeIn from "@/components/fade-in";
+import NotistackProvider from "@/components/notistack-provider";
 import { menuEntries } from "@/data/menu";
+import { ImagePreviewContextProvider } from "@/context/image-preview-modal/image-preview-context";
+import Menu from "@/components/MainMenu";
 
 export const metadata: Metadata = {
   title: "Configuratori Lostuzzo",
@@ -25,9 +26,11 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={`antialiased`}>
-        <Menu entries={menuEntries}>
-          <FadeIn>{children}</FadeIn>
-        </Menu>
+        <ImagePreviewContextProvider>
+          <Menu entries={menuEntries}>
+            <FadeIn>{children}</FadeIn>
+          </Menu>
+        </ImagePreviewContextProvider>
         <NotistackProvider />
       </body>
     </html>

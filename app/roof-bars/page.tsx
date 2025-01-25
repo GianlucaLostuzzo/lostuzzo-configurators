@@ -1,11 +1,11 @@
 "use client";
 
 import { useCallback, useState } from "react";
-import { useMountQuery } from "@/hooks/useMountQuery";
-import TextSelector from "@/components/TextSelector";
-import PageTitle from "@/components/PageTitle";
-import ActionsButtons from "@/components/ActionButtons";
-import ResultsSection from "@/components/ResultsSection";
+import { useMountQuery } from "@/hooks/use-mount-query";
+import TextSelector from "@/components/text-selector";
+import PageTitle from "@/components/page-title";
+import ActionsButtons from "@/components/action-button";
+import ResultsSection from "@/components/results-section";
 
 export default function RoofBarsConfigurator() {
   const [form, setForm] = useState({
@@ -218,7 +218,11 @@ export default function RoofBarsConfigurator() {
         />
       </form>
 
-      <ResultsSection results={results} loading={loading} imageBasePath="ep_roof_bars" />
+      <ResultsSection
+        results={results}
+        loading={loading}
+        imageBasePath="ep_roof_bars"
+      />
     </div>
   );
 }

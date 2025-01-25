@@ -1,10 +1,10 @@
 "use client";
-import ActionButtons from "@/components/ActionButtons";
-import NumericSelector from "@/components/NumericSelector";
-import PageTitle from "@/components/PageTitle";
-import ResultsSection from "@/components/ResultsSection";
-import TextSelector from "@/components/TextSelector";
-import { useMountQuery } from "@/hooks/useMountQuery";
+import ActionButtons from "@/components/action-button";
+import NumericSelector from "@/components/numeric-selector";
+import PageTitle from "@/components/page-title";
+import ResultsSection from "@/components/results-section";
+import TextSelector from "@/components/text-selector";
+import { useMountQuery } from "@/hooks/use-mount-query";
 import { useCallback, useMemo, useState } from "react";
 
 const amperesOptions = [
