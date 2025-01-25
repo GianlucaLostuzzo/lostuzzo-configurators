@@ -13,7 +13,7 @@ export default function ImageWithFallback(props: ImageWithFallbackProps) {
   const [url, setUrl] = useState(props.href.toLowerCase());
   const preview = useImagePreview();
 
-  const hasNotImage = url !== props.href;
+  const hasNotImage = url === fallback;
 
   return (
     <div
