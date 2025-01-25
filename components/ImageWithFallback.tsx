@@ -7,7 +7,7 @@ export interface ImageWithFallbackProps {
 }
 
 export default function ImageWithFallback(props: ImageWithFallbackProps) {
-  const [url, setUrl] = useState(props.href);
+  const [url, setUrl] = useState(props.href.toLowerCase());
 
   const hasNotImage = url !== props.href;
 
