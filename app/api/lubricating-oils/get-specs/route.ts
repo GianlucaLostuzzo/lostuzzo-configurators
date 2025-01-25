@@ -28,6 +28,7 @@ export async function GET(request: Request) {
       },
       select: { specs: true },
       distinct: ["specs"],
+      orderBy: { specs: "asc" },
     });
 
     return new NextResponse(toJson(specs.map((s) => s.specs)), {

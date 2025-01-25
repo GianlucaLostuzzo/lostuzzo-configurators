@@ -20,6 +20,7 @@ export async function GET(request: Request) {
       },
       select: { color: true },
       distinct: ["color"],
+      orderBy: { color: "asc" },
     });
 
     // Respond with the list of colors

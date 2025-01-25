@@ -27,6 +27,7 @@ export async function GET(request: Request) {
       },
       select: { type: true },
       distinct: ["type"],
+      orderBy: { type: "asc" },
     });
 
     // Map the types to a JSON-friendly format

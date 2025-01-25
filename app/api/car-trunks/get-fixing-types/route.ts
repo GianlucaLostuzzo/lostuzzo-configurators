@@ -20,6 +20,7 @@ export async function GET(request: Request) {
       },
       select: { fixing_type: true },
       distinct: ["fixing_type"],
+      orderBy: { fixing_type: "asc" },
     });
 
     // Respond with the list of fixing types

@@ -28,6 +28,7 @@ export async function GET(request: Request) {
       },
       select: { oem_brand: true },
       distinct: ["oem_brand"],
+      orderBy: { oem_brand: "asc" },
     });
 
     return new NextResponse(toJson(oemBrands.map((o) => o.oem_brand)), {

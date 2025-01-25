@@ -7,6 +7,7 @@ export async function GET() {
     const typologies = await prisma.epBatteries.findMany({
       select: { typology: true },
       distinct: ["typology"],
+      orderBy: { typology: "asc" },
     });
 
     return new NextResponse(toJson(typologies.map((t) => t.typology)), {

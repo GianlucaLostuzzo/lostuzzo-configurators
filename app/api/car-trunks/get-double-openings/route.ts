@@ -20,6 +20,7 @@ export async function GET(request: Request) {
       },
       select: { double_opening: true },
       distinct: ["double_opening"],
+      orderBy: { double_opening: "asc" },
     });
 
     // Respond with the list of double openings

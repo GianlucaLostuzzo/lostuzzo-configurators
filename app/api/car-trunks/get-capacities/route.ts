@@ -17,6 +17,7 @@ export async function GET(request: Request) {
       },
       select: { capacity: true },
       distinct: ["capacity"],
+      orderBy: { capacity: "asc" },
     });
 
     return new NextResponse(toJson(capacities.map((c) => c.capacity)), {

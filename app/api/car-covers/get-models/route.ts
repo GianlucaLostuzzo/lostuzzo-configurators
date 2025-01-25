@@ -19,6 +19,7 @@ export async function GET(request: Request) {
       where: { brand: brand },
       select: { model: true },
       distinct: ["model"],
+      orderBy: { model: "asc" },
     });
 
     // Map the models to a JSON-friendly format

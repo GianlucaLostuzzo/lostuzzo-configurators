@@ -28,6 +28,7 @@ export async function GET(request: Request) {
       },
       select: { format: true },
       distinct: ["format"],
+      orderBy: { format: "asc" },
     });
 
     return new NextResponse(toJson(gradations.map((g) => g.format)), {

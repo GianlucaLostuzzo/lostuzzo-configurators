@@ -19,6 +19,7 @@ export async function GET(request: Request) {
       where: { car_brand: carBrand },
       select: { car_model: true },
       distinct: ["car_model"],
+      orderBy: { car_model: "asc" },
     });
 
     // Respond with the list of car models

@@ -31,6 +31,7 @@ export async function GET(request: Request) {
       },
       select: { product_code: true },
       distinct: ["product_code"],
+      orderBy: { product_code: "asc" },
     });
 
     return new NextResponse(toJson(products.map((y) => y.product_code)), {

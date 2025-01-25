@@ -18,6 +18,7 @@ export async function GET(request: Request) {
       where: { car_brand: carBrand, car_model: carModel },
       select: { car_year: true },
       distinct: ["car_year"],
+      orderBy: { car_year: "asc" },
     });
 
     return new NextResponse(toJson(years.map((y) => y.car_year)), {

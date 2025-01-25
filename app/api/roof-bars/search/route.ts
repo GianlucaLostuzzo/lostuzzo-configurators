@@ -28,6 +28,7 @@ export async function GET(request: Request) {
         ...(typeBar && { type: typeBar }),
       },
       select: { code: true },
+      orderBy: { code: "asc" },
     });
 
     return new NextResponse(toJson(results.map((r) => r.code)), {

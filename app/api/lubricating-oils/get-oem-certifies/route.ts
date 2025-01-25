@@ -28,6 +28,7 @@ export async function GET(request: Request) {
       },
       select: { oem_certify: true },
       distinct: ["oem_certify"],
+      orderBy: { oem_certify: "asc" },
     });
 
     return new NextResponse(toJson(oemCertifies.map((o) => o.oem_certify)), {

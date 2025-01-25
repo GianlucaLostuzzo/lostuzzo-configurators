@@ -7,6 +7,7 @@ export async function GET() {
     const years = await prisma.epLubricatingOils.findMany({
       select: { type: true },
       distinct: ["type"],
+      orderBy: { type: "asc" },
     });
 
     return new NextResponse(toJson(years.map((y) => y.type)), {

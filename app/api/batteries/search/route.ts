@@ -75,6 +75,7 @@ export async function GET(request: Request) {
         ...(positivePolarity && { positive_polarity: positivePolarity }),
       },
       select: { product_code: true },
+      orderBy: { product_code: "asc" },
     });
 
     return new NextResponse(toJson(results.map((r) => r.product_code)), {

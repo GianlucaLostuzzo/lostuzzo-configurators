@@ -8,6 +8,7 @@ export async function GET() {
     const types = await prisma.epAutoMats.findMany({
       select: { type: true },
       distinct: ["type"],
+      orderBy: { type: "asc" },
     });
 
     // Map the types to a JSON-friendly format

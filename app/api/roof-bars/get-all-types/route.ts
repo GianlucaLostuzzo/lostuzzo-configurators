@@ -7,6 +7,7 @@ export async function GET() {
     const types = await prisma.epRoofBars.findMany({
       select: { type: true },
       distinct: ["type"],
+      orderBy: { type: "asc" },
     });
 
     return new NextResponse(toJson(types.map((t) => t.type)), {

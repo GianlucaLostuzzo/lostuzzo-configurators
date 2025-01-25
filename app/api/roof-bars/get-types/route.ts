@@ -23,6 +23,7 @@ export async function GET(request: Request) {
       where: { manufacter, brand, model, year },
       select: { type: true },
       distinct: ["type"],
+      orderBy: { type: "asc" },
     });
 
     return new NextResponse(toJson(types.map((t) => t.type)), {

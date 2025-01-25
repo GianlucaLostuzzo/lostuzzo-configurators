@@ -15,6 +15,7 @@ export async function GET(request: Request) {
       where: { brand },
       select: { model: true },
       distinct: ["model"],
+      orderBy: { model: "asc" },
     });
 
     return new NextResponse(toJson(models.map((m) => m.model)), {

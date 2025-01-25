@@ -18,6 +18,7 @@ export async function GET(request: Request) {
       where: { brand, model },
       select: { year: true },
       distinct: ["year"],
+      orderBy: { year: "asc" },
     });
 
     return new NextResponse(toJson(years.map((y) => y.year)), {

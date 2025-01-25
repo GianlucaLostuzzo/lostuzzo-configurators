@@ -24,6 +24,7 @@ export async function GET(request: Request) {
         ...(carYear && { car_year: carYear }),
       },
       select: { product_code: true },
+      orderBy: { product_code: "asc" },
     });
 
     // Respond with the list of product codes

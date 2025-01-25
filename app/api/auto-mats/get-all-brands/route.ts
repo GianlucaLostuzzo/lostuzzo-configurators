@@ -6,6 +6,7 @@ export async function GET() {
     const brands = await prisma.epAutoMats.findMany({
       select: { brand: true },
       distinct: ["brand"],
+      orderBy: { brand: "asc" },
     });
 
     return NextResponse.json(brands.map((b) => b.brand));

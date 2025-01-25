@@ -7,6 +7,7 @@ export async function GET() {
     const brands = await prisma.epTrunkLiner.findMany({
       select: { car_brand: true },
       distinct: ["car_brand"],
+      orderBy: { car_brand: "asc" },
     });
 
     return new NextResponse(toJson(brands.map((b) => b.car_brand)), {

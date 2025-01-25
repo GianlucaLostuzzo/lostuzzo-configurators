@@ -7,6 +7,7 @@ export async function GET() {
     const years = await prisma.epRoofBars.findMany({
       select: { manufacter: true },
       distinct: ["manufacter"],
+      orderBy: { manufacter: "asc" },
     });
 
     return new NextResponse(toJson(years.map((y) => y.manufacter)), {

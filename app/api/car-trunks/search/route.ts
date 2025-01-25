@@ -18,6 +18,7 @@ export async function GET(request: Request) {
         ...(fixingType && { fixing_type: fixingType }),
       },
       select: { code: true },
+      orderBy: { code: "asc" },
     });
 
     return new NextResponse(toJson(results.map((r) => r.code)), {
