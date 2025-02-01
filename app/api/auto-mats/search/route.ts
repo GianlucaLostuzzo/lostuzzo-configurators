@@ -2,6 +2,8 @@ import prisma from "@/lib/db";
 import { toJson } from "@/lib/json";
 import { NextResponse } from "next/server";
 
+type Filter = Parameters<typeof prisma.epAutoMats.findMany>[0];
+
 export async function GET(request: Request) {
   const { searchParams } = new URL(request.url);
 
@@ -14,16 +16,25 @@ export async function GET(request: Request) {
     return new NextResponse("Missing 'brandCar' parameter", { status: 400 });
   }
 
+  const queryFilter: Filter = {
+    where: {
+      brand: brandCar,
+      ...(modelCar && { model: modelCar }),
+      ...(yearCar && { year: yearCar }),
+      ...(typeMat && { type: typeMat }),
+    },
+    select: { code: true },
+    orderBy: { code: "asc" },
+  };
+
   try {
-    const results = await prisma.epAutoMats.findMany({
-      where: {
-        brand: brandCar,
-        ...(modelCar && { model: modelCar }),
-        ...(yearCar && { year: yearCar }),
-        ...(typeMat && { type: typeMat }),
+    const results = await prisma.epAutoMats.findMany(queryFilter);
+
+    await prisma.epLog.create({
+      data: {
+        configurator: "ep_auto_mats",
+        filter: toJson(queryFilter),
       },
-      select: { code: true },
-      orderBy: { code: "asc" },
     });
 
     return new NextResponse(toJson(results.map((r) => r.code)), {
