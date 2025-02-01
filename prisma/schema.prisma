@@ -8,20 +8,22 @@ datasource db {
 }
 
 model EpAutoMats {
-  auto_mats_id BigInt    @id @default(autoincrement())
+  auto_mats_id BigInt    @id
   brand        String    @db.VarChar(20)
   model        String    @db.VarChar(40)
   year         String    @db.VarChar(20)
   type         String    @db.VarChar(20)
   code         String    @db.VarChar(20)
-  date_created DateTime?
-  date_updated DateTime?
+  created_by   BigInt?
+  date_created DateTime? @db.Timestamp(6)
+  date_updated DateTime? @db.Timestamp(6)
+  updated_by   BigInt?
 
   @@map("ep_auto_mats")
 }
 
 model EpBatteries {
-  batteries_id      BigInt    @id @default(autoincrement())
+  batteries_id      BigInt    @id
   typology          String    @db.VarChar(255)
   product_code      String    @db.VarChar(255)
   cdalias           String?   @db.VarChar(255)
@@ -33,39 +35,45 @@ model EpBatteries {
   ah                Decimal?  @db.Decimal(19, 5)
   a_en              Decimal?  @db.Decimal(19, 5)
   positive_polarity String?   @db.VarChar(10)
-  date_created      DateTime?
-  date_updated      DateTime?
+  created_by        BigInt?
+  date_created      DateTime? @db.Timestamp(6)
+  date_updated      DateTime? @db.Timestamp(6)
+  updated_by        BigInt?
 
   @@map("ep_batteries")
 }
 
 model EpCarCovers {
-  car_covers_id BigInt    @id @default(autoincrement())
+  car_covers_id BigInt    @id
   brand         String    @db.VarChar(40)
   model         String    @db.VarChar(40)
   code          String    @db.VarChar(20)
-  date_created  DateTime?
-  date_updated  DateTime?
+  created_by    BigInt?
+  date_created  DateTime? @db.Timestamp(6)
+  date_updated  DateTime? @db.Timestamp(6)
+  updated_by    BigInt?
 
   @@map("ep_car_covers")
 }
 
 model EpCarTrunks {
-  car_trunks_id  BigInt    @id @default(autoincrement())
+  car_trunks_id  BigInt    @id
   brand          String    @db.VarChar(20)
   code           String    @db.VarChar(20)
   capacity       String    @db.VarChar(20)
   color          String    @db.VarChar(20)
   double_opening String    @db.VarChar(10)
   fixing_type    String    @db.VarChar(40)
-  date_created   DateTime?
-  date_updated   DateTime?
+  created_by     BigInt?
+  date_created   DateTime? @db.Timestamp(6)
+  date_updated   DateTime? @db.Timestamp(6)
+  updated_by     BigInt?
 
   @@map("ep_car_trunks")
 }
 
 model EpLubricatingOils {
-  lubricating_oils_id BigInt    @id @default(autoincrement())
+  lubricating_oils_id BigInt    @id
   type                String?   @db.VarChar(255)
   gradation           String?   @db.VarChar(255)
   brand               String?   @db.VarChar(255)
@@ -74,34 +82,40 @@ model EpLubricatingOils {
   oem_brand           String?   @db.VarChar(255)
   oem_certify         String?   @db.VarChar(255)
   product_code        String    @db.VarChar(255)
-  date_created        DateTime?
-  date_updated        DateTime?
+  created_by          BigInt?
+  date_created        DateTime? @db.Timestamp(6)
+  date_updated        DateTime? @db.Timestamp(6)
+  updated_by          BigInt?
   dsmarca             String?   @db.VarChar(40)
 
   @@map("ep_lubricating_oils")
 }
 
 model EpRoofBars {
-  roof_bars_id BigInt    @id @default(autoincrement())
+  roof_bars_id BigInt    @id
   manufacter   String    @db.VarChar(20)
   brand        String    @db.VarChar(20)
   model        String    @db.VarChar(255)
   year         String    @db.VarChar(20)
   type         String    @db.VarChar(255)
   code         String    @db.VarChar(100)
-  date_created DateTime?
-  date_updated DateTime?
+  created_by   BigInt?
+  date_created DateTime? @db.Timestamp(6)
+  date_updated DateTime? @db.Timestamp(6)
+  updated_by   BigInt?
 
   @@map("ep_roof_bars")
 }
 
 model EpSnowChains {
-  snow_chains_id BigInt    @id @default(autoincrement())
+  snow_chains_id BigInt    @id
   diameter       String    @db.VarChar(10)
   width          String    @db.VarChar(10)
   ratio          String    @db.VarChar(10)
-  date_created   DateTime?
-  date_updated   DateTime?
+  created_by     BigInt?
+  date_created   DateTime? @db.Timestamp(6)
+  date_updated   DateTime? @db.Timestamp(6)
+  updated_by     BigInt?
   product_code   String?   @db.VarChar(255)
   typology       String?   @db.VarChar(255)
 
@@ -109,15 +123,17 @@ model EpSnowChains {
 }
 
 model EpTrunkLiner {
-  trunk_liner_id BigInt    @id @default(autoincrement())
+  trunk_liner_id BigInt    @id
   car_brand      String    @db.VarChar(255)
   car_model      String    @db.VarChar(255)
   car_year       String?   @db.VarChar(255)
   cdalias        String?   @db.VarChar(255)
   product_code   String    @db.VarChar(255)
   brand          String?   @db.VarChar(255)
-  date_created   DateTime?
-  date_updated   DateTime?
+  created_by     BigInt?
+  date_created   DateTime? @db.Timestamp(6)
+  date_updated   DateTime? @db.Timestamp(6)
+  updated_by     BigInt?
 
   @@map("ep_trunk_liner")
 }
