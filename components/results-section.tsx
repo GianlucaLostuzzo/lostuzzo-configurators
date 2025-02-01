@@ -3,6 +3,7 @@ import { BiCopy } from "react-icons/bi";
 import { useState } from "react";
 import ImageWithFallback from "./image-with-fallback";
 
+const PAGE_SIZE = 9;
 const STATIC_URL = process.env.NEXT_PUBLIC_STATIC_URL;
 
 export interface ResultsSectionProps {
@@ -13,7 +14,7 @@ export interface ResultsSectionProps {
 
 export default function ResultsSection(props: ResultsSectionProps) {
   const { loading = false, results, imageBasePath = "" } = props;
-  const [visibleCount, setVisibleCount] = useState(10);
+  const [visibleCount, setVisibleCount] = useState(PAGE_SIZE);
 
   if (!results) {
     return <></>;
@@ -26,7 +27,7 @@ export default function ResultsSection(props: ResultsSectionProps) {
   };
 
   const handleLoadMore = () => {
-    setVisibleCount((prev) => prev + 10);
+    setVisibleCount((prev) => prev + PAGE_SIZE);
   };
 
   return (
