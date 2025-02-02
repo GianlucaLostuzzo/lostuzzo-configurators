@@ -2,6 +2,8 @@ import prisma from "@/lib/db";
 import { toJson } from "@/lib/json";
 import { NextResponse } from "next/server";
 
+type Filter = Parameters<typeof prisma.epCarTrunks.findMany>[0];
+
 export async function GET(request: Request) {
   const { searchParams } = new URL(request.url);
   const capacity = searchParams.get("capacity");
@@ -9,16 +11,25 @@ export async function GET(request: Request) {
   const doubleOpening = searchParams.get("doubleOpening");
   const fixingType = searchParams.get("fixingType");
 
+  const filter: Filter = {
+    where: {
+      ...(capacity && { capacity }),
+      ...(color && { color }),
+      ...(doubleOpening && { double_opening: doubleOpening }),
+      ...(fixingType && { fixing_type: fixingType }),
+    },
+    select: { code: true },
+    orderBy: { code: "asc" },
+  };
+
   try {
-    const results = await prisma.epCarTrunks.findMany({
-      where: {
-        ...(capacity && { capacity }),
-        ...(color && { color }),
-        ...(doubleOpening && { double_opening: doubleOpening }),
-        ...(fixingType && { fixing_type: fixingType }),
+    const results = await prisma.epCarTrunks.findMany(filter);
+
+    await prisma.epLog.create({
+      data: {
+        configurator: "ep_car_trunks",
+        filter: toJson(filter),
       },
-      select: { code: true },
-      orderBy: { code: "asc" },
     });
 
     return new NextResponse(toJson(results.map((r) => r.code)), {

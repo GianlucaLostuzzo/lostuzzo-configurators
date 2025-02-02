@@ -2,6 +2,8 @@ import prisma from "@/lib/db";
 import { toJson } from "@/lib/json";
 import { NextResponse } from "next/server";
 
+type Filter = Parameters<typeof prisma.epSnowChains.findMany>[0];
+
 export async function GET(request: Request) {
   const { searchParams } = new URL(request.url);
   const width = searchParams.get("width");
@@ -13,16 +15,25 @@ export async function GET(request: Request) {
     return new NextResponse("Missing 'width' parameter", { status: 400 });
   }
 
+  const filter: Filter = {
+    where: {
+      ...(width && { width }),
+      ...(ratio && { ratio }),
+      ...(diameter && { diameter }),
+      ...(typology && { typology }),
+    },
+    select: { product_code: true },
+    orderBy: { product_code: "asc" },
+  };
+
   try {
-    const results = await prisma.epSnowChains.findMany({
-      where: {
-        ...(width && { width }),
-        ...(ratio && { ratio }),
-        ...(diameter && { diameter }),
-        ...(typology && { typology }),
+    const results = await prisma.epSnowChains.findMany(filter);
+
+    await prisma.epLog.create({
+      data: {
+        configurator: "ep_snow_chains",
+        filter: toJson(filter),
       },
-      select: { product_code: true },
-      orderBy: { product_code: "asc" },
     });
 
     return new NextResponse(toJson(results.map((r) => r.product_code)), {

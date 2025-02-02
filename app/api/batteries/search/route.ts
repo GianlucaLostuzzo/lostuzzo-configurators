@@ -3,6 +3,8 @@ import { toJson } from "@/lib/json";
 import { Prisma } from "@prisma/client";
 import { NextResponse } from "next/server";
 
+type Filter = Parameters<typeof prisma.epBatteries.findMany>[0];
+
 export async function GET(request: Request) {
   const { searchParams } = new URL(request.url);
   const typology = searchParams.get("typology");
@@ -45,37 +47,46 @@ export async function GET(request: Request) {
   const hasAhInterval = minimumAh !== undefined && maximumAh !== undefined;
   const hasAhLowerBound = minimumAh !== undefined && maximumAh === undefined;
 
+  const filter: Filter = {
+    where: {
+      typology,
+      ...(hasAhInterval && { ah: { gte: minimumAh, lte: maximumAh } }),
+      ...(hasAhLowerBound && { ah: { gte: minimumAh } }),
+      ...(length &&
+        length != "0" && {
+          length: {
+            lte: lengthDecimal.add(lengthToleranceDecimal),
+            gte: lengthDecimal.sub(lengthToleranceDecimal),
+          },
+        }),
+      ...(width &&
+        width != "0" && {
+          width: {
+            lte: widthDecimal.add(widthToleranceDecimal),
+            gte: widthDecimal.sub(widthToleranceDecimal),
+          },
+        }),
+      ...(height &&
+        height != "0" && {
+          height: {
+            lte: heightDecimal.add(heightToleranceDecimal),
+            gte: heightDecimal.sub(heightToleranceDecimal),
+          },
+        }),
+      ...(positivePolarity && { positive_polarity: positivePolarity }),
+    },
+    select: { product_code: true },
+    orderBy: { product_code: "asc" },
+  };
+
   try {
-    const results = await prisma.epBatteries.findMany({
-      where: {
-        typology,
-        ...(hasAhInterval && { ah: { gte: minimumAh, lte: maximumAh } }),
-        ...(hasAhLowerBound && { ah: { gte: minimumAh } }),
-        ...(length &&
-          length != "0" && {
-            length: {
-              lte: lengthDecimal.add(lengthToleranceDecimal),
-              gte: lengthDecimal.sub(lengthToleranceDecimal),
-            },
-          }),
-        ...(width &&
-          width != "0" && {
-            width: {
-              lte: widthDecimal.add(widthToleranceDecimal),
-              gte: widthDecimal.sub(widthToleranceDecimal),
-            },
-          }),
-        ...(height &&
-          height != "0" && {
-            height: {
-              lte: heightDecimal.add(heightToleranceDecimal),
-              gte: heightDecimal.sub(heightToleranceDecimal),
-            },
-          }),
-        ...(positivePolarity && { positive_polarity: positivePolarity }),
+    const results = await prisma.epBatteries.findMany(filter);
+
+    await prisma.epLog.create({
+      data: {
+        configurator: "ep_batteries",
+        filter: toJson(filter),
       },
-      select: { product_code: true },
-      orderBy: { product_code: "asc" },
     });
 
     return new NextResponse(toJson(results.map((r) => r.product_code)), {

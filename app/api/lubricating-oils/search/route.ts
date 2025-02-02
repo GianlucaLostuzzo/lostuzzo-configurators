@@ -2,6 +2,8 @@ import prisma from "@/lib/db";
 import { toJson } from "@/lib/json";
 import { NextResponse } from "next/server";
 
+type Filter = Parameters<typeof prisma.epLubricatingOils.findMany>[0];
+
 export async function GET(request: Request) {
   const { searchParams } = new URL(request.url);
   const type = searchParams.get("type");
@@ -18,20 +20,29 @@ export async function GET(request: Request) {
     });
   }
 
+  const filter: Filter = {
+    where: {
+      type,
+      ...(gradation && { gradation }),
+      ...(format && { format }),
+      ...(specs && { specs }),
+      ...(brand && { brand }),
+      ...(oemBrand && { oem_brand: oemBrand }),
+      ...(oemCertify && { oem_certify: oemCertify }),
+    },
+    select: { product_code: true },
+    distinct: ["product_code"],
+    orderBy: { product_code: "asc" },
+  };
+
   try {
-    const products = await prisma.epLubricatingOils.findMany({
-      where: {
-        type,
-        ...(gradation && { gradation }),
-        ...(format && { format }),
-        ...(specs && { specs }),
-        ...(brand && { brand }),
-        ...(oemBrand && { oem_brand: oemBrand }),
-        ...(oemCertify && { oem_certify: oemCertify }),
+    const products = await prisma.epLubricatingOils.findMany(filter);
+
+    await prisma.epLog.create({
+      data: {
+        configurator: "ep_lubricating_oils",
+        filter: toJson(filter),
       },
-      select: { product_code: true },
-      distinct: ["product_code"],
-      orderBy: { product_code: "asc" },
     });
 
     return new NextResponse(toJson(products.map((y) => y.product_code)), {

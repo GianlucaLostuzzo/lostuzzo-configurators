@@ -2,6 +2,8 @@ import prisma from "@/lib/db";
 import { toJson } from "@/lib/json";
 import { NextResponse } from "next/server";
 
+type Filter = Parameters<typeof prisma.epRoofBars.findMany>[0];
+
 export async function GET(request: Request) {
   const { searchParams } = new URL(request.url);
   const manufacturerCar =
@@ -18,17 +20,26 @@ export async function GET(request: Request) {
     );
   }
 
+  const filter: Filter = {
+    where: {
+      manufacter: manufacturerCar,
+      brand: brandCar,
+      model: modelCar,
+      year: yearCar,
+      ...(typeBar && { type: typeBar }),
+    },
+    select: { code: true },
+    orderBy: { code: "asc" },
+  };
+
   try {
-    const results = await prisma.epRoofBars.findMany({
-      where: {
-        manufacter: manufacturerCar,
-        brand: brandCar,
-        model: modelCar,
-        year: yearCar,
-        ...(typeBar && { type: typeBar }),
+    const results = await prisma.epRoofBars.findMany(filter);
+
+    await prisma.epLog.create({
+      data: {
+        configurator: "ep_roof_bars",
+        filter: toJson(filter),
       },
-      select: { code: true },
-      orderBy: { code: "asc" },
     });
 
     return new NextResponse(toJson(results.map((r) => r.code)), {
