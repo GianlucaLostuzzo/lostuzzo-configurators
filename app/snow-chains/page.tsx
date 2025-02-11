@@ -6,6 +6,7 @@ import ActionButtons from "@/components/action-button";
 import PageTitle from "@/components/page-title";
 import ResultsSection from "@/components/results-section";
 import TextSelector from "@/components/text-selector";
+import { ApiProductResult } from "@/lib/types";
 
 export default function SnowChainsConfigurator() {
   const [form, setForm] = useState({
@@ -23,7 +24,7 @@ export default function SnowChainsConfigurator() {
   const [diameterOptions, setDiameterOptions] = useState<string[]>([]);
   const [typologyOptions, setTypologyOptions] = useState<string[]>([]);
 
-  const [results, setResults] = useState<string[] | null>(null);
+  const [results, setResults] = useState<Array<ApiProductResult> | null>(null);
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {

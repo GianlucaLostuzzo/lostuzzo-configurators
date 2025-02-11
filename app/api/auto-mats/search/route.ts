@@ -23,7 +23,7 @@ export async function GET(request: Request) {
       ...(yearCar && { year: yearCar }),
       ...(typeMat && { type: typeMat }),
     },
-    select: { code: true },
+    select: { code: true, brand: true, description: true },
     orderBy: { code: "asc" },
   };
 
@@ -37,11 +37,20 @@ export async function GET(request: Request) {
       },
     });
 
-    return new NextResponse(toJson(results.map((r) => r.code)), {
-      headers: {
-        "Content-Type": "application/json",
-      },
-    });
+    return new NextResponse(
+      toJson(
+        results.map((r) => ({
+          product_code: r.code,
+          description: r.description,
+          brand: r.brand,
+        }))
+      ),
+      {
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }
+    );
   } catch (error) {
     console.error(error);
     return new NextResponse("Internal Server Error", { status: 500 });

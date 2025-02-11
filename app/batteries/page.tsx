@@ -5,6 +5,7 @@ import PageTitle from "@/components/page-title";
 import ResultsSection from "@/components/results-section";
 import TextSelector from "@/components/text-selector";
 import { useMountQuery } from "@/hooks/use-mount-query";
+import { ApiProductResult } from "@/lib/types";
 import { useCallback, useMemo, useState } from "react";
 
 const amperesOptions = [
@@ -52,7 +53,7 @@ export default function Configurator() {
   const { data: typologies } = useMountQuery(
     "/api/batteries/get-all-typologies"
   );
-  const [results, setResults] = useState<string[] | null>(null);
+  const [results, setResults] = useState<Array<ApiProductResult> | null>(null);
   const [loading, setLoading] = useState(false);
 
   // Handle form changes

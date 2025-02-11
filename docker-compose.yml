@@ -1,6 +1,6 @@
 services:
   db:
-    image: postgres
+    image: postgres:17
     volumes:
       - pgdata:/var/lib/postgresql/data
       - ./dumps:/tmp
@@ -11,7 +11,6 @@ services:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: pass
       POSTGRES_DB: lostuzzo
-    
+
 volumes:
   pgdata:
-

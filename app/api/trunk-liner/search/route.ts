@@ -23,7 +23,7 @@ export async function GET(request: Request) {
       ...(carModel && { car_model: carModel }),
       ...(carYear && { car_year: carYear }),
     },
-    select: { product_code: true },
+    select: { product_code: true, brand: true, description: true },
     orderBy: { product_code: "asc" },
   };
 
@@ -39,11 +39,20 @@ export async function GET(request: Request) {
     });
 
     // Respond with the list of product codes
-    return new NextResponse(toJson(products.map((p) => p.product_code)), {
-      headers: {
-        "Content-Type": "application/json",
-      },
-    });
+    return new NextResponse(
+      toJson(
+        products.map((r) => ({
+          product_code: r.product_code,
+          description: r.description,
+          brand: r.brand,
+        }))
+      ),
+      {
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }
+    );
   } catch (error) {
     console.error("Error searching trunk liners:", error);
     return new NextResponse("Internal Server Error", { status: 500 });

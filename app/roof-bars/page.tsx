@@ -6,6 +6,7 @@ import TextSelector from "@/components/text-selector";
 import PageTitle from "@/components/page-title";
 import ActionsButtons from "@/components/action-button";
 import ResultsSection from "@/components/results-section";
+import { ApiProductResult } from "@/lib/types";
 
 export default function RoofBarsConfigurator() {
   const [form, setForm] = useState({
@@ -23,7 +24,7 @@ export default function RoofBarsConfigurator() {
   const [modelOptions, setModelOptions] = useState<string[]>([]);
   const [yearOptions, setYearOptions] = useState<string[]>([]);
   const [typeOptions, setTypeOptions] = useState<string[]>([]);
-  const [results, setResults] = useState<string[] | null>(null);
+  const [results, setResults] = useState<Array<ApiProductResult> | null>(null);
   const [loading, setLoading] = useState(false);
 
   const fetchOptions = useCallback(

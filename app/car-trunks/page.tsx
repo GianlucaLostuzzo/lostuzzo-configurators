@@ -6,6 +6,7 @@ import TextSelector from "@/components/text-selector";
 import PageTitle from "@/components/page-title";
 import ActionsButtons from "@/components/action-button";
 import ResultsSection from "@/components/results-section";
+import { ApiProductResult } from "@/lib/types";
 
 type FormData = {
   capacity: string;
@@ -58,7 +59,7 @@ export default function CarTrunksConfigurator() {
     fixingTypeOptionsFilter
   );
 
-  const [results, setResults] = useState<string[] | null>(null);
+  const [results, setResults] = useState<Array<ApiProductResult> | null>(null);
   const [loading, setLoading] = useState(false);
 
   const fetchOptions = useCallback(

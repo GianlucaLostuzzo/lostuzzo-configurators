@@ -30,7 +30,7 @@ export async function GET(request: Request) {
       ...(oemBrand && { oem_brand: oemBrand }),
       ...(oemCertify && { oem_certify: oemCertify }),
     },
-    select: { product_code: true },
+    select: { product_code: true, description: true, brand: true },
     distinct: ["product_code"],
     orderBy: { product_code: "asc" },
   };
@@ -45,7 +45,7 @@ export async function GET(request: Request) {
       },
     });
 
-    return new NextResponse(toJson(products.map((y) => y.product_code)), {
+    return new NextResponse(toJson(products), {
       headers: { "Content-Type": "application/json" },
     });
   } catch {

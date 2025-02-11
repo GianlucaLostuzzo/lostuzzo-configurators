@@ -2,12 +2,13 @@ import { enqueueSnackbar } from "notistack";
 import { BiCopy } from "react-icons/bi";
 import { useState } from "react";
 import ImageWithFallback from "./image-with-fallback";
+import { ApiProductResult } from "@/lib/types";
 
 const PAGE_SIZE = 9;
 const STATIC_URL = process.env.NEXT_PUBLIC_STATIC_URL;
 
 export interface ResultsSectionProps {
-  results?: string[] | null;
+  results?: Array<ApiProductResult> | null;
   loading?: boolean;
   imageBasePath?: string;
 }
@@ -38,24 +39,27 @@ export default function ResultsSection(props: ResultsSectionProps) {
       {results.length > 0 ? (
         <>
           <div className="mt-4 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {results.slice(0, visibleCount).map((code, i) => (
+            {results.slice(0, visibleCount).map((product, i) => (
               <div
-                key={`result_${code}_${i}`}
+                key={`result_${product.product_code}_${i}`}
                 className="bg-white shadow-lg rounded-lg overflow-hidden transition-transform transform border hover:scale-105"
               >
                 <div className="w-full h-48 relative flex">
                   <ImageWithFallback
-                    href={`${STATIC_URL}/${imageBasePath}/${code}.jpg`}
+                    href={`${STATIC_URL}/${imageBasePath}/${product.product_code}.jpg`}
                   />
                 </div>
                 <div className="p-4 text-center">
                   <span className="block text-lg font-medium text-gray-800 mb-2">
-                    {code}
+                    {product.product_code}
+                  </span>
+                  <span className="block text-sm font-light text-gray-500 mb-2 min-h-10">
+                    {product.description}
                   </span>
                   <button
-                    onClick={() => handleCopy(code)}
+                    onClick={() => handleCopy(product.product_code)}
                     className="text-gray-500 hover:text-primary focus:outline-none flex items-center justify-center gap-2 border px-4 py-2 rounded-md w-full"
-                    aria-label={`Copy code ${code}`}
+                    aria-label={`Copy code ${product.product_code}`}
                   >
                     <BiCopy size={20} />
                     Copia codice

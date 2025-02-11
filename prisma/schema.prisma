@@ -15,6 +15,7 @@ model EpAutoMats {
     type         String    @db.VarChar(20)
     code         String    @db.VarChar(20)
     created_by   BigInt?
+    description  String?   @db.VarChar(255)
     date_created DateTime? @db.Timestamp(6)
     date_updated DateTime? @db.Timestamp(6)
     updated_by   BigInt?
@@ -34,6 +35,7 @@ model EpBatteries {
     volt              Decimal?  @db.Decimal(19, 5)
     ah                Decimal?  @db.Decimal(19, 5)
     a_en              Decimal?  @db.Decimal(19, 5)
+    description       String?   @db.VarChar(255)
     positive_polarity String?   @db.VarChar(10)
     created_by        BigInt?
     date_created      DateTime? @db.Timestamp(6)
@@ -47,6 +49,7 @@ model EpCarCovers {
     car_covers_id BigInt    @id
     brand         String    @db.VarChar(40)
     model         String    @db.VarChar(40)
+    description   String?   @db.VarChar(255)
     code          String    @db.VarChar(20)
     created_by    BigInt?
     date_created  DateTime? @db.Timestamp(6)
@@ -60,6 +63,7 @@ model EpCarTrunks {
     car_trunks_id  BigInt    @id
     brand          String    @db.VarChar(20)
     code           String    @db.VarChar(20)
+    description    String?   @db.VarChar(255)
     capacity       String    @db.VarChar(20)
     color          String    @db.VarChar(20)
     double_opening String    @db.VarChar(10)
@@ -75,6 +79,7 @@ model EpCarTrunks {
 model EpLubricatingOils {
     lubricating_oils_id BigInt    @id
     type                String?   @db.VarChar(255)
+    description         String?   @db.VarChar(255)
     gradation           String?   @db.VarChar(255)
     brand               String?   @db.VarChar(255)
     format              String?   @db.VarChar(255)
@@ -95,6 +100,7 @@ model EpRoofBars {
     roof_bars_id BigInt    @id
     manufacter   String    @db.VarChar(20)
     brand        String    @db.VarChar(20)
+    description  String?   @db.VarChar(255)
     model        String    @db.VarChar(255)
     year         String    @db.VarChar(20)
     type         String    @db.VarChar(255)
@@ -112,6 +118,7 @@ model EpSnowChains {
     diameter       String    @db.VarChar(10)
     width          String    @db.VarChar(10)
     ratio          String    @db.VarChar(10)
+    description    String?   @db.VarChar(255)
     created_by     BigInt?
     date_created   DateTime? @db.Timestamp(6)
     date_updated   DateTime? @db.Timestamp(6)
@@ -128,6 +135,7 @@ model EpTrunkLiner {
     car_model      String    @db.VarChar(255)
     car_year       String?   @db.VarChar(255)
     cdalias        String?   @db.VarChar(255)
+    description    String?   @db.VarChar(255)
     product_code   String    @db.VarChar(255)
     brand          String?   @db.VarChar(255)
     created_by     BigInt?

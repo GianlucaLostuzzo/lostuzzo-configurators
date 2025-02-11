@@ -22,7 +22,7 @@ export async function GET(request: Request) {
       ...(diameter && { diameter }),
       ...(typology && { typology }),
     },
-    select: { product_code: true },
+    select: { product_code: true, description: true },
     orderBy: { product_code: "asc" },
   };
 
@@ -36,9 +36,18 @@ export async function GET(request: Request) {
       },
     });
 
-    return new NextResponse(toJson(results.map((r) => r.product_code)), {
-      headers: { "Content-Type": "application/json" },
-    });
+    return new NextResponse(
+      toJson(
+        results.map((r) => ({
+          product_code: r.product_code,
+          description: r.description,
+          brand: undefined,
+        }))
+      ),
+      {
+        headers: { "Content-Type": "application/json" },
+      }
+    );
   } catch {
     return new NextResponse("Internal Server Error", { status: 500 });
   }

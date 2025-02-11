@@ -6,6 +6,7 @@ import TextSelector from "@/components/text-selector";
 import PageTitle from "@/components/page-title";
 import ActionsButtons from "@/components/action-button";
 import ResultsSection from "@/components/results-section";
+import { ApiProductResult } from "@/lib/types";
 
 export default function LubricatingOilsConfigurator() {
   const [form, setForm] = useState({
@@ -29,7 +30,7 @@ export default function LubricatingOilsConfigurator() {
   const [oemBrandOptions, setOemBrandOptions] = useState<string[]>([]);
   const [oemCertifyOptions, setOemCertifyOptions] = useState<string[]>([]);
 
-  const [results, setResults] = useState<string[] | null>(null);
+  const [results, setResults] = useState<Array<ApiProductResult> | null>(null);
   const [loading, setLoading] = useState(false);
 
   const fetchOptions = useCallback(
