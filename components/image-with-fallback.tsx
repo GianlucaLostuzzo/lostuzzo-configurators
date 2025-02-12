@@ -33,6 +33,7 @@ export default function ImageWithFallback(props: ImageWithFallbackProps) {
           onError={() => setUrl(fallback)}
           width={400}
           height={300}
+          unoptimized
           className="object-contain"
         />
       )}
