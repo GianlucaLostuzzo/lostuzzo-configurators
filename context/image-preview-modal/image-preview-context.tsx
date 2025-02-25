@@ -75,6 +75,7 @@ export const ImagePreviewContextProvider = ({
             alt="Preview"
             width={600}
             height={400}
+            unoptimized
             className="rounded-lg object-contain"
           />
         )}
