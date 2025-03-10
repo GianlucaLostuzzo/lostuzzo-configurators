@@ -46,6 +46,7 @@ export default function ResultsSection(props: ResultsSectionProps) {
               >
                 <div className="w-full h-48 relative flex">
                   <ImageWithFallback
+                    brand={product.brand}
                     href={`${STATIC_URL}/${imageBasePath}/${product.product_code}.jpg`}
                   />
                 </div>
