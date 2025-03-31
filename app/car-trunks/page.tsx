@@ -59,7 +59,7 @@ export default function CarTrunksConfigurator() {
     fixingTypeOptionsFilter
   );
 
-  const [results, setResults] = useState<Array<ApiProductResult> | null>(null);
+  const [results, setResults] = useState<ApiProductResult | null>(null);
   const [loading, setLoading] = useState(false);
 
   const fetchOptions = useCallback(
@@ -147,7 +147,7 @@ export default function CarTrunksConfigurator() {
           value={form.capacity}
           disabledOptionText="Seleziona una capacità"
           onChange={handleChange}
-          options={capacityOptions}
+          options={capacityOptions.data.map((x) => x.value)}
         />
 
         <TextSelector
@@ -156,7 +156,7 @@ export default function CarTrunksConfigurator() {
           value={form.color}
           disabledOptionText="Seleziona un colore"
           onChange={handleChange}
-          options={colorOptions}
+          options={colorOptions.data.map((x) => x.value)}
         />
 
         <TextSelector
@@ -165,7 +165,7 @@ export default function CarTrunksConfigurator() {
           value={form.doubleOpening}
           disabledOptionText="Seleziona un tipo di apertura"
           onChange={handleChange}
-          options={doubleOpeningOptions}
+          options={doubleOpeningOptions.data.map((x) => x.value)}
         />
 
         <TextSelector
@@ -174,7 +174,7 @@ export default function CarTrunksConfigurator() {
           value={form.fixingType}
           disabledOptionText="Seleziona un tipo di fissaggio"
           onChange={handleChange}
-          options={fixingTypeOptions}
+          options={fixingTypeOptions.data.map((x) => x.value)}
         />
 
         <ActionsButtons loading={loading} onReset={resetAll} />

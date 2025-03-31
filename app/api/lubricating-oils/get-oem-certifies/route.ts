@@ -1,5 +1,5 @@
 import prisma from "@/lib/db";
-import { toJson } from "@/lib/json";
+import { toApiFilterResult } from "@/lib/json";
 import { NextResponse } from "next/server";
 
 export async function GET(request: Request) {
@@ -31,9 +31,9 @@ export async function GET(request: Request) {
       orderBy: { oem_certify: "asc" },
     });
 
-    return new NextResponse(toJson(oemCertifies.map((o) => o.oem_certify)), {
-      headers: { "Content-Type": "application/json" },
-    });
+    return NextResponse.json(
+      toApiFilterResult(oemCertifies.map((o) => o.oem_certify))
+    );
   } catch (error) {
     console.error("Error fetching OEM certifies:", error);
     return new NextResponse("Internal Server Error", { status: 500 });

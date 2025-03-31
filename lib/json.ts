@@ -3,3 +3,11 @@ export const toJson = (d: unknown) => {
     typeof value === "bigint" ? value.toString() : value
   );
 };
+
+export const toApiFilterResult = (data: unknown[]) => {
+  return {
+    data: data.map((item) => ({
+      value: item,
+    })),
+  };
+};

@@ -40,13 +40,13 @@ export async function GET(request: Request) {
 
     // Respond with the list of product codes
     return new NextResponse(
-      toJson(
-        products.map((r) => ({
+      toJson({
+        data: products.map((r) => ({
           product_code: r.product_code,
           description: r.description,
           brand: r.brand,
-        }))
-      ),
+        })),
+      }),
       {
         headers: {
           "Content-Type": "application/json",

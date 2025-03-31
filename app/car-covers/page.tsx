@@ -6,7 +6,7 @@ import TextSelector from "@/components/text-selector";
 import PageTitle from "@/components/page-title";
 import ActionsButtons from "@/components/action-button";
 import ResultsSection from "@/components/results-section";
-import { ApiProductResult } from "@/lib/types";
+import { ApiFilterResult, ApiProductResult } from "@/lib/types";
 
 export default function CarCoversConfigurator() {
   const [form, setForm] = useState({
@@ -15,8 +15,10 @@ export default function CarCoversConfigurator() {
   });
 
   const { data: brandOptions } = useMountQuery("/api/car-covers/get-brands");
-  const [modelOptions, setModelOptions] = useState<string[]>([]);
-  const [results, setResults] = useState<Array<ApiProductResult> | null>(null);
+  const [modelOptions, setModelOptions] = useState<ApiFilterResult>({
+    data: [],
+  });
+  const [results, setResults] = useState<ApiProductResult | null>(null);
   const [loading, setLoading] = useState(false);
 
   const fetchModels = useCallback(async (brand: string) => {
@@ -62,7 +64,7 @@ export default function CarCoversConfigurator() {
 
   const resetAll = useCallback(() => {
     setForm({ brand: "", model: "" });
-    setModelOptions([]);
+    setModelOptions({ data: [] });
     setResults(null);
   }, []);
 
@@ -77,7 +79,7 @@ export default function CarCoversConfigurator() {
           value={form.brand}
           disabledOptionText="Seleziona una marca"
           onChange={handleChange}
-          options={brandOptions}
+          options={brandOptions.data.map((x) => x.value)}
         />
 
         <TextSelector
@@ -86,7 +88,7 @@ export default function CarCoversConfigurator() {
           value={form.model}
           disabledOptionText="Seleziona un modello"
           onChange={handleChange}
-          options={modelOptions}
+          options={modelOptions.data.map((x) => x.value)}
           disabled={!form.brand || form.brand === "all"}
         />
 

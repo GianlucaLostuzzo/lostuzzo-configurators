@@ -1,4 +1,5 @@
 import prisma from "@/lib/db";
+import { toApiFilterResult } from "@/lib/json";
 import { NextResponse } from "next/server";
 
 export async function GET() {
@@ -9,7 +10,7 @@ export async function GET() {
       orderBy: { brand: "asc" },
     });
 
-    return NextResponse.json(brands.map((b) => b.brand));
+    return NextResponse.json(toApiFilterResult(brands.map((b) => b.brand)));
   } catch (error) {
     console.error(error);
     return NextResponse.json({ error: "Server Error" }, { status: 500 });

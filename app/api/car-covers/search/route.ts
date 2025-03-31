@@ -29,13 +29,13 @@ export async function GET(request: Request) {
     });
 
     return new NextResponse(
-      toJson(
-        results.map((r) => ({
+      toJson({
+        data: results.map((r) => ({
           product_code: r.code,
           brand: r.brand,
           description: r.description,
-        }))
-      ),
+        })),
+      }),
       {
         headers: {
           "Content-Type": "application/json",

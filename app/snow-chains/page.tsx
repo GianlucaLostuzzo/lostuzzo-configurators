@@ -6,7 +6,7 @@ import ActionButtons from "@/components/action-button";
 import PageTitle from "@/components/page-title";
 import ResultsSection from "@/components/results-section";
 import TextSelector from "@/components/text-selector";
-import { ApiProductResult } from "@/lib/types";
+import { ApiFilterResult, ApiProductResult } from "@/lib/types";
 
 export default function SnowChainsConfigurator() {
   const [form, setForm] = useState({
@@ -20,11 +20,17 @@ export default function SnowChainsConfigurator() {
     "/api/snow-chains/get-all-widths"
   );
 
-  const [ratioOptions, setRatioOptions] = useState<string[]>([]);
-  const [diameterOptions, setDiameterOptions] = useState<string[]>([]);
-  const [typologyOptions, setTypologyOptions] = useState<string[]>([]);
+  const [ratioOptions, setRatioOptions] = useState<ApiFilterResult>({
+    data: [],
+  });
+  const [diameterOptions, setDiameterOptions] = useState<ApiFilterResult>({
+    data: [],
+  });
+  const [typologyOptions, setTypologyOptions] = useState<ApiFilterResult>({
+    data: [],
+  });
 
-  const [results, setResults] = useState<Array<ApiProductResult> | null>(null);
+  const [results, setResults] = useState<ApiProductResult | null>(null);
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
@@ -39,8 +45,8 @@ export default function SnowChainsConfigurator() {
             diameter: "",
             typology: "",
           }));
-          setDiameterOptions([]);
-          setTypologyOptions([]);
+          setDiameterOptions({ data: [] });
+          setTypologyOptions({ data: [] });
         });
     }
   }, [form.width]);
@@ -58,7 +64,7 @@ export default function SnowChainsConfigurator() {
             diameter: "",
             typology: "",
           }));
-          setTypologyOptions([]);
+          setTypologyOptions({ data: [] });
         });
     }
   }, [form.width, form.ratio]);
@@ -117,9 +123,9 @@ export default function SnowChainsConfigurator() {
       diameter: "",
       typology: "",
     });
-    setDiameterOptions([]);
-    setRatioOptions([]);
-    setTypologyOptions([]);
+    setDiameterOptions({ data: [] });
+    setRatioOptions({ data: [] });
+    setTypologyOptions({ data: [] });
     setResults(null);
   }, []);
 
@@ -134,7 +140,7 @@ export default function SnowChainsConfigurator() {
           value={form.width}
           disabledOptionText="Seleziona larghezza"
           onChange={handleChange}
-          options={widthOptions}
+          options={widthOptions.data.map((x) => x.value)}
         />
 
         <TextSelector
@@ -143,7 +149,7 @@ export default function SnowChainsConfigurator() {
           value={form.ratio}
           disabledOptionText="Seleziona spalla"
           onChange={handleChange}
-          options={ratioOptions}
+          options={ratioOptions.data.map((x) => x.value)}
           disabled={!form.width}
         />
 
@@ -153,7 +159,7 @@ export default function SnowChainsConfigurator() {
           value={form.diameter}
           disabledOptionText="Seleziona diametro"
           onChange={handleChange}
-          options={diameterOptions}
+          options={diameterOptions.data.map((x) => x.value)}
           disabled={!form.ratio}
         />
 
@@ -163,7 +169,7 @@ export default function SnowChainsConfigurator() {
           value={form.typology}
           disabledOptionText="Seleziona tipologia"
           onChange={handleChange}
-          options={typologyOptions}
+          options={typologyOptions.data.map((x) => x.value)}
           disabled={!form.diameter}
         />
 

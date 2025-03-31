@@ -1,6 +1,6 @@
 import prisma from "@/lib/db";
 import { NextResponse } from "next/server";
-import { toJson } from "@/lib/json";
+import { toApiFilterResult } from "@/lib/json";
 
 export async function GET(request: Request) {
   const { searchParams } = new URL(request.url);
@@ -23,11 +23,7 @@ export async function GET(request: Request) {
     });
 
     // Respond with the list of car models
-    return new NextResponse(toJson(models.map((m) => m.car_model)), {
-      headers: {
-        "Content-Type": "application/json",
-      },
-    });
+    return NextResponse.json(toApiFilterResult(models.map((m) => m.car_model)));
   } catch (error) {
     console.error("Error fetching car models:", error);
     return new NextResponse("Internal Server Error", { status: 500 });

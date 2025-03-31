@@ -1,5 +1,5 @@
 import prisma from "@/lib/db";
-import { toJson } from "@/lib/json";
+import { toApiFilterResult } from "@/lib/json";
 import { NextResponse } from "next/server";
 
 export async function GET() {
@@ -10,11 +10,9 @@ export async function GET() {
       orderBy: { typology: "asc" },
     });
 
-    return new NextResponse(toJson(typologies.map((t) => t.typology)), {
-      headers: {
-        "Content-Type": "application/json",
-      },
-    });
+    return NextResponse.json(
+      toApiFilterResult(typologies.map((t) => t.typology))
+    );
   } catch (error) {
     console.error(error);
     return new NextResponse("Internal Server Error", { status: 500 });

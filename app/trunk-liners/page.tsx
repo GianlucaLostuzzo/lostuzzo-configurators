@@ -6,7 +6,7 @@ import TextSelector from "@/components/text-selector";
 import PageTitle from "@/components/page-title";
 import ActionsButtons from "@/components/action-button";
 import ResultsSection from "@/components/results-section";
-import { ApiProductResult } from "@/lib/types";
+import { ApiFilterResult, ApiProductResult } from "@/lib/types";
 
 export default function TrunkLinersConfigurator() {
   const [form, setForm] = useState({
@@ -18,23 +18,25 @@ export default function TrunkLinersConfigurator() {
   const { data: brandOptions } = useMountQuery(
     "/api/trunk-liner/get-car-brands"
   );
-  const [modelOptions, setModelOptions] = useState<string[]>([]);
-  const [yearOptions, setYearOptions] = useState<string[]>([]);
-  const [results, setResults] = useState<Array<ApiProductResult> | null>(null);
+  const [modelOptions, setModelOptions] = useState<ApiFilterResult>({
+    data: [],
+  });
+  const [yearOptions, setYearOptions] = useState<ApiFilterResult>({ data: [] });
+  const [results, setResults] = useState<ApiProductResult | null>(null);
   const [loading, setLoading] = useState(false);
 
   const fetchOptions = useCallback(
     async (
       endpoint: string,
       filters: Record<string, string>,
-      setter: React.Dispatch<React.SetStateAction<string[]>>
+      setter: React.Dispatch<React.SetStateAction<ApiFilterResult>>
     ) => {
       const queryParams = new URLSearchParams(
         Object.entries(filters).filter(([, value]) => value)
       ).toString();
       const response = await fetch(`${endpoint}?${queryParams}`);
-      const data = await response.json();
-      setter(["all", ...data]);
+      const data = (await response.json()) as ApiFilterResult;
+      setter({ data: [{ value: "all" }, ...data.data] });
     },
     []
   );
@@ -45,8 +47,8 @@ export default function TrunkLinersConfigurator() {
       setForm((prev) => ({ ...prev, [name]: value }));
 
       if (name === "brand") {
-        setModelOptions([]);
-        setYearOptions([]);
+        setModelOptions({ data: [] });
+        setYearOptions({ data: [] });
         setForm((prev) => ({ ...prev, model: "", year: "" }));
         if (value !== "all") {
           fetchOptions(
@@ -56,7 +58,7 @@ export default function TrunkLinersConfigurator() {
           );
         }
       } else if (name === "model") {
-        setYearOptions([]);
+        setYearOptions({ data: [] });
         setForm((prev) => ({ ...prev, year: "" }));
         if (value !== "all") {
           fetchOptions(
@@ -103,8 +105,8 @@ export default function TrunkLinersConfigurator() {
 
   const resetAll = useCallback(() => {
     setForm({ brand: "", model: "", year: "" });
-    setModelOptions([]);
-    setYearOptions([]);
+    setModelOptions({ data: [] });
+    setYearOptions({ data: [] });
     setResults(null);
   }, []);
 
@@ -119,7 +121,7 @@ export default function TrunkLinersConfigurator() {
           value={form.brand}
           disabledOptionText="Seleziona una marca"
           onChange={handleChange}
-          options={brandOptions}
+          options={brandOptions.data.map((x) => x.value)}
         />
 
         <TextSelector
@@ -128,7 +130,7 @@ export default function TrunkLinersConfigurator() {
           value={form.model}
           disabledOptionText="Seleziona un modello"
           onChange={handleChange}
-          options={modelOptions}
+          options={modelOptions.data.map((x) => x.value)}
           disabled={!form.brand || form.brand === "all"}
         />
 
@@ -138,7 +140,7 @@ export default function TrunkLinersConfigurator() {
           value={form.year}
           disabledOptionText="Seleziona un anno"
           onChange={handleChange}
-          options={yearOptions}
+          options={yearOptions.data.map((x) => x.value)}
           disabled={!form.model || form.model === "all"}
         />
 

@@ -1,5 +1,5 @@
 import prisma from "@/lib/db";
-import { toJson } from "@/lib/json";
+import { toApiFilterResult } from "@/lib/json";
 import { NextResponse } from "next/server";
 
 export async function GET(request: Request) {
@@ -26,9 +26,7 @@ export async function GET(request: Request) {
       orderBy: { type: "asc" },
     });
 
-    return new NextResponse(toJson(types.map((t) => t.type)), {
-      headers: { "Content-Type": "application/json" },
-    });
+    return NextResponse.json(toApiFilterResult(types.map((t) => t.type)));
   } catch (error) {
     console.error("Error fetching types:", error);
     return new NextResponse("Internal Server Error", { status: 500 });

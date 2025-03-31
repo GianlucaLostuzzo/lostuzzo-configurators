@@ -8,7 +8,7 @@ const PAGE_SIZE = 9;
 const STATIC_URL = process.env.NEXT_PUBLIC_STATIC_URL;
 
 export interface ResultsSectionProps {
-  results?: Array<ApiProductResult> | null;
+  results?: ApiProductResult | null;
   loading?: boolean;
   imageBasePath?: string;
 }
@@ -36,10 +36,10 @@ export default function ResultsSection(props: ResultsSectionProps) {
       <h2 className="text-2xl font-bold text-center text-primary mb-6">
         Risultati
       </h2>
-      {results.length > 0 ? (
+      {results.data.length > 0 ? (
         <>
           <div className="mt-4 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {results.slice(0, visibleCount).map((product, i) => (
+            {results.data.slice(0, visibleCount).map((product, i) => (
               <div
                 key={`result_${product.product_code}_${i}`}
                 className="bg-white shadow-lg rounded-lg overflow-hidden transition-transform transform border hover:scale-105"
@@ -69,7 +69,7 @@ export default function ResultsSection(props: ResultsSectionProps) {
               </div>
             ))}
           </div>
-          {visibleCount < results.length && (
+          {visibleCount < results.data.length && (
             <div className="flex justify-center mt-6">
               <button
                 onClick={handleLoadMore}

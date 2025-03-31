@@ -1,5 +1,5 @@
 import prisma from "@/lib/db";
-import { toJson } from "@/lib/json";
+import { toApiFilterResult } from "@/lib/json";
 import { NextResponse } from "next/server";
 
 export async function GET(request: Request) {
@@ -24,9 +24,9 @@ export async function GET(request: Request) {
     });
 
     // Respond with the list of fixing types
-    return new NextResponse(toJson(fixingTypes.map((f) => f.fixing_type)), {
-      headers: { "Content-Type": "application/json" },
-    });
+    return NextResponse.json(
+      toApiFilterResult(fixingTypes.map((f) => f.fixing_type))
+    );
   } catch (error) {
     console.error("Error fetching car trunk fixing types:", error);
     return new NextResponse("Internal Server Error", { status: 500 });

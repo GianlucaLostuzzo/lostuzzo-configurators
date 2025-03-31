@@ -1,5 +1,5 @@
 import prisma from "@/lib/db";
-import { toJson } from "@/lib/json";
+import { toApiFilterResult } from "@/lib/json";
 import { NextResponse } from "next/server";
 
 export async function GET(request: Request) {
@@ -22,9 +22,7 @@ export async function GET(request: Request) {
       orderBy: { model: "asc" },
     });
 
-    return new NextResponse(toJson(models.map((m) => m.model)), {
-      headers: { "Content-Type": "application/json" },
-    });
+    return NextResponse.json(toApiFilterResult(models.map((m) => m.model)));
   } catch (error) {
     console.error("Error fetching roof bar models:", error);
     return new NextResponse("Internal Server Error", { status: 500 });

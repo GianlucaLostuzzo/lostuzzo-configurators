@@ -1,6 +1,6 @@
 import prisma from "@/lib/db";
 import { NextResponse } from "next/server";
-import { toJson } from "@/lib/json";
+import { toApiFilterResult } from "@/lib/json";
 
 export async function GET(request: Request) {
   const { searchParams } = new URL(request.url);
@@ -21,9 +21,7 @@ export async function GET(request: Request) {
       orderBy: { brand: "asc" },
     });
 
-    return new NextResponse(toJson(brands.map((b) => b.brand)), {
-      headers: { "Content-Type": "application/json" },
-    });
+    return NextResponse.json(toApiFilterResult(brands.map((b) => b.brand)));
   } catch (error) {
     console.error("Error fetching roof bar brands:", error);
     return new NextResponse("Internal Server Error", { status: 500 });

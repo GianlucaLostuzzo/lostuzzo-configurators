@@ -1,5 +1,5 @@
 import prisma from "@/lib/db";
-import { toJson } from "@/lib/json";
+import { toApiFilterResult } from "@/lib/json";
 import { NextResponse } from "next/server";
 
 export async function GET(request: Request) {
@@ -31,9 +31,7 @@ export async function GET(request: Request) {
       orderBy: { brand: "asc" },
     });
 
-    return new NextResponse(toJson(brands.map((b) => b.brand)), {
-      headers: { "Content-Type": "application/json" },
-    });
+    return NextResponse.json(toApiFilterResult(brands.map((b) => b.brand)));
   } catch (error) {
     console.error("Error fetching brands:", error);
     return new NextResponse("Internal Server Error", { status: 500 });

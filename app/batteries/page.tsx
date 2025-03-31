@@ -53,7 +53,7 @@ export default function Configurator() {
   const { data: typologies } = useMountQuery(
     "/api/batteries/get-all-typologies"
   );
-  const [results, setResults] = useState<Array<ApiProductResult> | null>(null);
+  const [results, setResults] = useState<ApiProductResult | null>(null);
   const [loading, setLoading] = useState(false);
 
   // Handle form changes
@@ -117,7 +117,7 @@ export default function Configurator() {
             label="Tipologia"
             onChange={handleChange}
             value={form.typology}
-            options={typologies}
+            options={typologies.data.map((x) => x.value)}
             disabledOptionText="Seleziona tipologia"
           />
         </div>

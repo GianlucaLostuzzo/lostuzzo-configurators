@@ -1,6 +1,6 @@
 import prisma from "@/lib/db";
 import { NextResponse } from "next/server";
-import { toJson } from "@/lib/json";
+import { toApiFilterResult } from "@/lib/json";
 
 export async function GET(request: Request) {
   const { searchParams } = new URL(request.url);
@@ -31,9 +31,9 @@ export async function GET(request: Request) {
       orderBy: { gradation: "asc" },
     });
 
-    return new NextResponse(toJson(gradations.map((g) => g.gradation)), {
-      headers: { "Content-Type": "application/json" },
-    });
+    return NextResponse.json(
+      toApiFilterResult(gradations.map((g) => g.gradation))
+    );
   } catch (error) {
     console.error("Error fetching gradations:", error);
     return new NextResponse("Internal Server Error", { status: 500 });

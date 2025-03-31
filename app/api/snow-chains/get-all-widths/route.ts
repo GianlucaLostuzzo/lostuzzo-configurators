@@ -1,5 +1,5 @@
 import prisma from "@/lib/db";
-import { toJson } from "@/lib/json";
+import { toApiFilterResult } from "@/lib/json";
 import { NextResponse } from "next/server";
 
 export async function GET() {
@@ -10,9 +10,7 @@ export async function GET() {
       orderBy: { width: "asc" },
     });
 
-    return new NextResponse(toJson(results.map((r) => r.width)), {
-      headers: { "Content-Type": "application/json" },
-    });
+    return NextResponse.json(toApiFilterResult(results.map((r) => r.width)));
   } catch {
     return new NextResponse("Internal Server Error", { status: 500 });
   }

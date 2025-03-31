@@ -45,9 +45,18 @@ export async function GET(request: Request) {
       },
     });
 
-    return new NextResponse(toJson(products), {
-      headers: { "Content-Type": "application/json" },
-    });
+    return new NextResponse(
+      toJson({
+        data: products.map((r) => ({
+          product_code: r.product_code,
+          brand: r.brand,
+          description: r.description,
+        })),
+      }),
+      {
+        headers: { "Content-Type": "application/json" },
+      }
+    );
   } catch {
     return new NextResponse("Internal Server Error", { status: 500 });
   }

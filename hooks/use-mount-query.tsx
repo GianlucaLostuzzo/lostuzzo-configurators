@@ -1,3 +1,4 @@
+import { ApiFilterResult } from "@/lib/types";
 import { useEffect, useState } from "react";
 
 export const useMountQuery = (
@@ -5,7 +6,7 @@ export const useMountQuery = (
   query: Record<string, string> = {}
 ) => {
   const [isLoading, setIsLoading] = useState(true);
-  const [data, setData] = useState<string[]>([]);
+  const [data, setData] = useState<ApiFilterResult>({ data: [] });
 
   const queryParams = new URLSearchParams(query).toString();
 

@@ -6,7 +6,7 @@ import TextSelector from "@/components/text-selector";
 import PageTitle from "@/components/page-title";
 import ActionsButtons from "@/components/action-button";
 import ResultsSection from "@/components/results-section";
-import { ApiProductResult } from "@/lib/types";
+import { ApiFilterResult, ApiProductResult } from "@/lib/types";
 
 export default function LubricatingOilsConfigurator() {
   const [form, setForm] = useState({
@@ -23,14 +23,26 @@ export default function LubricatingOilsConfigurator() {
     "/api/lubricating-oils/get-all-types"
   );
 
-  const [gradationOptions, setGradationOptions] = useState<string[]>([]);
-  const [formatOptions, setFormatOptions] = useState<string[]>([]);
-  const [brandOptions, setBrandOptions] = useState<string[]>([]);
-  const [specsOptions, setSpecsOptions] = useState<string[]>([]);
-  const [oemBrandOptions, setOemBrandOptions] = useState<string[]>([]);
-  const [oemCertifyOptions, setOemCertifyOptions] = useState<string[]>([]);
+  const [gradationOptions, setGradationOptions] = useState<ApiFilterResult>({
+    data: [],
+  });
+  const [formatOptions, setFormatOptions] = useState<ApiFilterResult>({
+    data: [],
+  });
+  const [brandOptions, setBrandOptions] = useState<ApiFilterResult>({
+    data: [],
+  });
+  const [specsOptions, setSpecsOptions] = useState<ApiFilterResult>({
+    data: [],
+  });
+  const [oemBrandOptions, setOemBrandOptions] = useState<ApiFilterResult>({
+    data: [],
+  });
+  const [oemCertifyOptions, setOemCertifyOptions] = useState<ApiFilterResult>({
+    data: [],
+  });
 
-  const [results, setResults] = useState<Array<ApiProductResult> | null>(null);
+  const [results, setResults] = useState<ApiProductResult | null>(null);
   const [loading, setLoading] = useState(false);
 
   const fetchOptions = useCallback(
@@ -47,11 +59,11 @@ export default function LubricatingOilsConfigurator() {
       };
 
       const response = await fetch(endpoints[field]);
-      const data = await response.json();
+      const data = (await response.json()) as ApiFilterResult;
 
       const setters: Record<
         string,
-        React.Dispatch<React.SetStateAction<string[]>>
+        React.Dispatch<React.SetStateAction<ApiFilterResult>>
       > = {
         gradation: setGradationOptions,
         format: setFormatOptions,
@@ -61,7 +73,7 @@ export default function LubricatingOilsConfigurator() {
         oemCertify: setOemCertifyOptions,
       };
 
-      setters[field](["all", ...data]);
+      setters[field]({ data: [{ value: "all" }, ...data.data] });
     },
     []
   );
@@ -76,12 +88,12 @@ export default function LubricatingOilsConfigurator() {
       oemBrand: "",
       oemCertify: "",
     });
-    setGradationOptions([]);
-    setFormatOptions([]);
-    setBrandOptions([]);
-    setSpecsOptions([]);
-    setOemBrandOptions([]);
-    setOemCertifyOptions([]);
+    setGradationOptions({ data: [] });
+    setFormatOptions({ data: [] });
+    setBrandOptions({ data: [] });
+    setSpecsOptions({ data: [] });
+    setOemBrandOptions({ data: [] });
+    setOemCertifyOptions({ data: [] });
     setResults(null);
   }, []);
 
@@ -148,7 +160,7 @@ export default function LubricatingOilsConfigurator() {
           value={form.type}
           disabledOptionText="Seleziona un tipo"
           onChange={handleChange}
-          options={typeOptions}
+          options={typeOptions.data.map((x) => x.value)}
         />
 
         <TextSelector
@@ -156,7 +168,7 @@ export default function LubricatingOilsConfigurator() {
           label="Gradazione"
           value={form.gradation}
           onChange={handleChange}
-          options={gradationOptions}
+          options={gradationOptions.data.map((x) => x.value)}
           disabledOptionText="Seleziona un tipo"
           disabled={!form.type}
         />
@@ -166,7 +178,7 @@ export default function LubricatingOilsConfigurator() {
           label="Formato"
           value={form.format}
           onChange={handleChange}
-          options={formatOptions}
+          options={formatOptions.data.map((x) => x.value)}
           disabledOptionText="Seleziona un formato"
           disabled={!form.type}
         />
@@ -176,7 +188,7 @@ export default function LubricatingOilsConfigurator() {
           label="Marca"
           value={form.brand}
           onChange={handleChange}
-          options={brandOptions}
+          options={brandOptions.data.map((x) => x.value)}
           disabledOptionText="Seleziona una marca"
           disabled={!form.type}
         />
@@ -186,7 +198,7 @@ export default function LubricatingOilsConfigurator() {
           label="Specifiche"
           value={form.specs}
           onChange={handleChange}
-          options={specsOptions}
+          options={specsOptions.data.map((x) => x.value)}
           disabledOptionText="Seleziona specifiche"
           disabled={!form.type}
         />
@@ -197,7 +209,7 @@ export default function LubricatingOilsConfigurator() {
           value={form.oemBrand}
           disabledOptionText="Seleziona una marca OEM"
           onChange={handleChange}
-          options={oemBrandOptions}
+          options={oemBrandOptions.data.map((x) => x.value)}
           disabled={!form.type}
         />
 
@@ -207,7 +219,7 @@ export default function LubricatingOilsConfigurator() {
           disabledOptionText="Seleziona una certificazione OEM"
           value={form.oemCertify}
           onChange={handleChange}
-          options={oemCertifyOptions}
+          options={oemCertifyOptions.data.map((x) => x.value)}
           disabled={!form.type}
         />
 

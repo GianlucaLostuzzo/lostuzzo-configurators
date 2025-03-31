@@ -1,5 +1,5 @@
 import prisma from "@/lib/db";
-import { toJson } from "@/lib/json";
+import { toApiFilterResult } from "@/lib/json";
 import { NextResponse } from "next/server";
 
 export async function GET() {
@@ -10,9 +10,7 @@ export async function GET() {
       orderBy: { ratio: "asc" },
     });
 
-    return new NextResponse(toJson(ratios.map((r) => r.ratio)), {
-      headers: { "Content-Type": "application/json" },
-    });
+    return NextResponse.json(toApiFilterResult(ratios.map((r) => r.ratio)));
   } catch (error) {
     console.error("Error fetching all ratios:", error);
     return new NextResponse("Internal Server Error", { status: 500 });

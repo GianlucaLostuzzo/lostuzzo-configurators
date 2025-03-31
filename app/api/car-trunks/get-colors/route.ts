@@ -1,6 +1,6 @@
 import prisma from "@/lib/db";
 import { NextResponse } from "next/server";
-import { toJson } from "@/lib/json";
+import { toApiFilterResult } from "@/lib/json";
 
 export async function GET(request: Request) {
   const { searchParams } = new URL(request.url);
@@ -24,9 +24,7 @@ export async function GET(request: Request) {
     });
 
     // Respond with the list of colors
-    return new NextResponse(toJson(colors.map((c) => c.color)), {
-      headers: { "Content-Type": "application/json" },
-    });
+    return NextResponse.json(toApiFilterResult(colors.map((c) => c.color)));
   } catch (error) {
     console.error("Error fetching car trunk colors:", error);
     return new NextResponse("Internal Server Error", { status: 500 });

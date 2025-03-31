@@ -1,5 +1,5 @@
 import prisma from "@/lib/db";
-import { toJson } from "@/lib/json";
+import { toApiFilterResult } from "@/lib/json";
 import { NextResponse } from "next/server";
 
 export async function GET(request: Request) {
@@ -24,11 +24,8 @@ export async function GET(request: Request) {
     });
 
     // Respond with the list of double openings
-    return new NextResponse(
-      toJson(doubleOpenings.map((d) => d.double_opening)),
-      {
-        headers: { "Content-Type": "application/json" },
-      }
+    return NextResponse.json(
+      toApiFilterResult(doubleOpenings.map((d) => d.double_opening))
     );
   } catch (error) {
     console.error("Error fetching car trunk double openings:", error);
