@@ -3,6 +3,7 @@ import { BsSnow, BsUmbrella } from "react-icons/bs";
 import { RiOilFill } from "react-icons/ri";
 import { PiRug } from "react-icons/pi";
 import { GoContainer } from "react-icons/go";
+import { GiTowTruck } from "react-icons/gi";
 
 export const menuEntries = [
   {
@@ -49,5 +50,10 @@ export const menuEntries = [
     label: "Vasche baule",
     href: "/trunk-liners",
     icon: <GoContainer />,
+  },
+  {
+    label: "Ganci Traino",
+    href: "/towbars",
+    icon: <GiTowTruck />,
   },
 ];

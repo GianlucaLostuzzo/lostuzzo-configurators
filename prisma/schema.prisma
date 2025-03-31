@@ -154,3 +154,18 @@ model EpLog {
 
     @@map("ep_log")
 }
+
+model EpTowbars {
+    id            BigInt    @id
+    brand         String    @db.VarChar(20)
+    model         String    @db.VarChar(40)
+    year          String    @db.VarChar(20)
+    product_code  String    @db.VarChar(20)
+    description   String?   @db.VarChar(80)
+    created_by    BigInt?
+    date_created  DateTime? @db.Timestamp(6)
+    date_updated  DateTime? @db.Timestamp(6)
+    updated_by    BigInt?
+
+    @@map("ep_towbars")
+}
