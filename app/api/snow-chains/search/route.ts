@@ -22,7 +22,7 @@ export async function GET(request: Request) {
       ...(diameter && { diameter }),
       ...(typology && { typology }),
     },
-    select: { product_code: true, description: true },
+    select: { product_code: true, description: true, img_url: true },
     orderBy: { product_code: "asc" },
   };
 
@@ -42,6 +42,7 @@ export async function GET(request: Request) {
           product_code: r.product_code,
           description: r.description,
           brand: undefined,
+          image: r.img_url,
         })),
       }),
       {

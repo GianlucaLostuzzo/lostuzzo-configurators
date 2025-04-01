@@ -28,7 +28,7 @@ export async function GET(request: Request) {
       year: yearCar,
       ...(typeBar && { type: typeBar }),
     },
-    select: { code: true, brand: true, description: true },
+    select: { code: true, brand: true, description: true, img_url: true },
     orderBy: { code: "asc" },
   };
 
@@ -48,6 +48,7 @@ export async function GET(request: Request) {
           product_code: r.code,
           brand: r.brand,
           description: r.description,
+          image: r.img_url,
         })),
       }),
       {

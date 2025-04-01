@@ -99,11 +99,7 @@ export default function CarCoversConfigurator() {
         />
       </form>
 
-      <ResultsSection
-        results={results}
-        loading={loading}
-        imageBasePath="ep_car_covers"
-      />
+      <ResultsSection results={results} loading={loading} />
     </div>
   );
 }

@@ -23,7 +23,7 @@ export async function GET(request: Request) {
       ...(yearCar && { year: yearCar }),
       ...(typeMat && { type: typeMat }),
     },
-    select: { code: true, brand: true, description: true },
+    select: { code: true, brand: true, description: true, img_url: true },
     orderBy: { code: "asc" },
   };
 
@@ -43,6 +43,7 @@ export async function GET(request: Request) {
           product_code: r.code,
           description: r.description,
           brand: r.brand,
+          image: r.img_url,
         })),
       }),
       {

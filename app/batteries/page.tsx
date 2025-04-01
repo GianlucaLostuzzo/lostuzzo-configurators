@@ -220,11 +220,7 @@ export default function Configurator() {
       </form>
 
       {/* Results */}
-      <ResultsSection
-        results={results}
-        loading={loading}
-        imageBasePath="ep_batteries"
-      />
+      <ResultsSection results={results} loading={loading} />
     </div>
   );
 }

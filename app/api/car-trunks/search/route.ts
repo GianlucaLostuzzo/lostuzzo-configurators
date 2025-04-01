@@ -18,7 +18,7 @@ export async function GET(request: Request) {
       ...(doubleOpening && { double_opening: doubleOpening }),
       ...(fixingType && { fixing_type: fixingType }),
     },
-    select: { code: true, brand: true, description: true },
+    select: { code: true, brand: true, description: true, img_url: true },
     orderBy: { code: "asc" },
   };
 
@@ -38,6 +38,7 @@ export async function GET(request: Request) {
           product_code: r.code,
           brand: r.brand,
           description: r.description,
+          image: r.img_url,
         })),
       }),
       {

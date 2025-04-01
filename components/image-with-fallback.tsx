@@ -4,7 +4,7 @@ import Image from "next/image";
 import { useState } from "react";
 
 export interface ImageWithFallbackProps {
-  href: string;
+  href: string | null;
   brand?: string;
 }
 
@@ -15,7 +15,7 @@ const getPlaceholder = (brand: string) =>
 
 export default function ImageWithFallback(props: ImageWithFallbackProps) {
   // Start with the primary image URL (lowercase for consistency)
-  const [url, setUrl] = useState(props.href.toLowerCase());
+  const [url, setUrl] = useState(props.href?.toLowerCase() ?? "");
   const preview = useImagePreview();
 
   // Determine if we're displaying the fallback image

@@ -149,11 +149,7 @@ export default function TowbarsConfigurator() {
         />
       </form>
 
-      <ResultsSection
-        results={results}
-        loading={loading}
-        imageBasePath="ep_towbars"
-      />
+      <ResultsSection results={results} loading={loading} />
     </div>
   );
 }

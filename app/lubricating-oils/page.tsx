@@ -232,11 +232,7 @@ export default function LubricatingOilsConfigurator() {
       </form>
 
       {/* Results */}
-      <ResultsSection
-        results={results}
-        loading={loading}
-        imageBasePath="ep_lubricating_oils"
-      />
+      <ResultsSection results={results} loading={loading} />
     </div>
   );
 }

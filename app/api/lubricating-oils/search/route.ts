@@ -30,7 +30,12 @@ export async function GET(request: Request) {
       ...(oemBrand && { oem_brand: oemBrand }),
       ...(oemCertify && { oem_certify: oemCertify }),
     },
-    select: { product_code: true, description: true, brand: true },
+    select: {
+      product_code: true,
+      description: true,
+      brand: true,
+      img_url: true,
+    },
     distinct: ["product_code"],
     orderBy: { product_code: "asc" },
   };
@@ -51,6 +56,7 @@ export async function GET(request: Request) {
           product_code: r.product_code,
           brand: r.brand,
           description: r.description,
+          image: r.img_url,
         })),
       }),
       {

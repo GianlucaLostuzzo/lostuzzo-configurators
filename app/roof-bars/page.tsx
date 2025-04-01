@@ -223,11 +223,7 @@ export default function RoofBarsConfigurator() {
         />
       </form>
 
-      <ResultsSection
-        results={results}
-        loading={loading}
-        imageBasePath="ep_roof_bars"
-      />
+      <ResultsSection results={results} loading={loading} />
     </div>
   );
 }

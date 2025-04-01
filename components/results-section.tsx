@@ -10,11 +10,10 @@ const STATIC_URL = process.env.NEXT_PUBLIC_STATIC_URL;
 export interface ResultsSectionProps {
   results?: ApiProductResult | null;
   loading?: boolean;
-  imageBasePath?: string;
 }
 
 export default function ResultsSection(props: ResultsSectionProps) {
-  const { loading = false, results, imageBasePath = "" } = props;
+  const { loading = false, results } = props;
   const [visibleCount, setVisibleCount] = useState(PAGE_SIZE);
 
   if (!results) {
@@ -47,7 +46,9 @@ export default function ResultsSection(props: ResultsSectionProps) {
                 <div className="w-full h-48 relative flex">
                   <ImageWithFallback
                     brand={product.brand}
-                    href={`${STATIC_URL}/${imageBasePath}/${product.product_code}.jpg`}
+                    href={
+                      product.image ? `${STATIC_URL}/${product.image}` : null
+                    }
                   />
                 </div>
                 <div className="p-4 text-center">

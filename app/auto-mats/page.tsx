@@ -175,11 +175,7 @@ export default function AutoMatsConfigurator() {
         />
       </form>
 
-      <ResultsSection
-        results={results}
-        loading={loading}
-        imageBasePath="ep_auto_mats"
-      />
+      <ResultsSection results={results} loading={loading} />
     </div>
   );
 }
