@@ -56,7 +56,7 @@ export async function GET(request: Request) {
           product_code: r.product_code,
           brand: r.brand,
           description: r.description,
-          image: r.img_url,
+          image: r.img_url ?? `ep_lubricating_oils/${r.product_code}.jpg`,
         })),
       }),
       {

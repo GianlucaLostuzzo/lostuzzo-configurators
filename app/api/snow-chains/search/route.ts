@@ -42,7 +42,7 @@ export async function GET(request: Request) {
           product_code: r.product_code,
           description: r.description,
           brand: undefined,
-          image: r.img_url,
+          image: r.img_url ?? `ep_snow_chains/${r.product_code}.jpg`,
         })),
       }),
       {

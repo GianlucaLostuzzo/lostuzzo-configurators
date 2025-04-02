@@ -43,7 +43,7 @@ export async function GET(request: Request) {
           product_code: r.code,
           description: r.description,
           brand: r.brand,
-          image: r.img_url,
+          image: r.img_url ?? `ep_auto_mats/${r.code}.jpg`,
         })),
       }),
       {

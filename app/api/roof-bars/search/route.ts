@@ -48,7 +48,7 @@ export async function GET(request: Request) {
           product_code: r.code,
           brand: r.brand,
           description: r.description,
-          image: r.img_url,
+          image: r.img_url ?? `ep_roof_bars/${r.code}.jpg`,
         })),
       }),
       {

@@ -46,7 +46,7 @@ export async function GET(request: Request) {
           product_code: r.product_code,
           description: r.description,
           brand: r.brand,
-          image: r.img_url,
+          image: r.img_url ?? `ep_towbars/${r.product_code}.jpg`,
         })),
       }),
       {
