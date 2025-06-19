@@ -2,8 +2,7 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import React, { useState } from "react";
-import icon from "../app/icon-menu.png";
-import iconCdr from "../app/icon-cidierre.png";
+import iconCdr from "../app/logo.png";
 import Image from "next/image";
 
 interface MenuEntry {
@@ -24,7 +23,7 @@ export default function Menu({ entries, children }: MenuProps) {
   return (
     <div className="flex">
       <div
-        className={`fixed top-0 left-0 h-full bg-primary text-white w-64 transform ${
+        className={`fixed top-0 left-0 h-full bg-black text-white w-64 transform ${
           isOpen ? "translate-x-0" : "-translate-x-full"
         } transition-transform duration-300 ease-in-out z-50`}
       >
@@ -32,10 +31,10 @@ export default function Menu({ entries, children }: MenuProps) {
           <span className="text-lg font-bold">Menu</span>
           <button
             onClick={() => setIsOpen(false)}
-            className="text-gray-400 hover:text-white"
+            className="text-white-600 hover:text-red"
           >
             <svg
-              className="h-6 w-6"
+              className="h-8 w-8"
               xmlns="http://www.w3.org/2000/svg"
               fill="none"
               viewBox="0 0 24 24"
@@ -59,7 +58,7 @@ export default function Menu({ entries, children }: MenuProps) {
               className={`px-3 py-2 rounded-md flex flex-row gap-5 items-center text-base font-medium transition-all duration-200 ${
                 pathname === entry.href
                   ? "bg-gray-700 text-white"
-                  : "text-gray-300 hover:bg-gray-700 hover:text-white"
+                  : "text-gray-300 hover:bg-red-700 hover:text-white"
               }`}
             >
               <span className="text-xl">{entry.icon && entry.icon}</span>
@@ -99,7 +98,6 @@ export default function Menu({ entries, children }: MenuProps) {
           </button>
           <span className="text-xl font-bold flex flex-row gap-5">
             <Image src={iconCdr} alt="Icon" width={40} height={40} />
-            <Image src={icon} alt="Icon" width={32} height={32} />
           </span>
         </div>
         <div className="p-4">{children}</div>

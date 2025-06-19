@@ -1,9 +1,9 @@
-import { BiBattery, BiCar, BiHome, BiPackage } from "react-icons/bi";
-import { BsSnow, BsUmbrella } from "react-icons/bs";
-import { RiOilFill } from "react-icons/ri";
-import { PiRug } from "react-icons/pi";
-import { GoContainer } from "react-icons/go";
-import { GiTowTruck } from "react-icons/gi";
+import { BiHome, BiPackage } from "react-icons/bi";
+import { BsUmbrella } from "react-icons/bs";
+import { GiTowTruck, GiCarWheel, GiCarBattery } from "react-icons/gi";
+import { MdOutlineSdCard } from "react-icons/md";
+import { LiaRoadSolid, LiaOilCanSolid } from "react-icons/lia";
+import { FaTaxi } from "react-icons/fa";
 
 export const menuEntries = [
   {
@@ -14,17 +14,17 @@ export const menuEntries = [
   {
     label: "Batterie",
     href: "/batteries",
-    icon: <BiBattery />,
+    icon: <GiCarBattery />,
   },
   {
     label: "Catene da neve",
     href: "/snow-chains",
-    icon: <BsSnow />,
+    icon: <GiCarWheel />,
   },
   {
     label: "Bauli per auto",
     href: "/car-trunks",
-    icon: <BiCar />,
+    icon: <FaTaxi />,
   },
   {
     label: "Teli copriauto",
@@ -34,7 +34,7 @@ export const menuEntries = [
   {
     label: "Oli lubrificanti",
     href: "/lubricating-oils",
-    icon: <RiOilFill />,
+    icon: <LiaOilCanSolid />,
   },
   {
     label: "Portaggio e carico",
@@ -44,12 +44,12 @@ export const menuEntries = [
   {
     label: "Tappetini auto",
     href: "/auto-mats",
-    icon: <PiRug />,
+    icon: <MdOutlineSdCard />,
   },
   {
     label: "Vasche baule",
     href: "/trunk-liners",
-    icon: <GoContainer />,
+    icon: <LiaRoadSolid />,
   },
   {
     label: "Ganci Traino",

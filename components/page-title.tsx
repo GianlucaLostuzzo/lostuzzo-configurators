@@ -3,7 +3,8 @@ export interface PageTitleProps {
 }
 export default function PageTitle({ children }: PageTitleProps) {
   return (
-    <h1 className="text-4xl font-bold mb-8 text-center text-primary">
+    //dark:text-white
+    <h1 className="text-4xl font-bold mb-8 text-center text-black">
       {children}
     </h1>
   );

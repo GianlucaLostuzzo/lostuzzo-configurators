@@ -7,11 +7,11 @@ import { ImagePreviewContextProvider } from "@/context/image-preview-modal/image
 import Menu from "@/components/MainMenu";
 
 export const metadata: Metadata = {
-  title: "Configuratori Lostuzzo",
+  title: "Configuratori CDR",
   description:
     "Configuratori per batterie, catene da neve, oli lubrificanti e altro",
   openGraph: {
-    title: "Configuratori Lostuzzo",
+    title: "Configuratori CDR",
     description:
       "Configuratori per batterie, catene da neve, oli lubrificanti e altro",
     images: "/icon.png",

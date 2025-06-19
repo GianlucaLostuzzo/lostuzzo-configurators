@@ -24,7 +24,7 @@ export default function ActionsButtons(props: ActionDefaultsProps) {
         <button
           type="button"
           onClick={onReset}
-          className="px-8 py-3 bg-gray-400 text-white font-medium rounded-lg shadow-md hover:bg-gray-500 focus:outline-none focus:ring-2 focus:ring-gray-300"
+          className="px-8 py-3 bg-red-700 text-white font-medium rounded-lg shadow-md hover:bg-gray-500 focus:outline-none focus:ring-2 focus:ring-gray-300"
         >
           Reset
         </button>
