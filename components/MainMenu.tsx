@@ -4,6 +4,8 @@ import { usePathname } from "next/navigation";
 import React, { useState } from "react";
 import iconCdr from "../app/icon.png";
 import iconNegative from "../app/icon-negative.png";
+import payoff from "../app/payoff.png";
+import payoffNegative from "../app/payoff-negativo.png";
 import Image from "next/image";
 
 interface MenuEntry {
@@ -77,30 +79,40 @@ export default function Menu({ entries, children }: MenuProps) {
       )}
 
       <div className="flex-1">
-        <div className="bg-gray-200 text-white h-16 flex items-center justify-between px-4 dark:bg-black">
-          <button
-            onClick={() => setIsOpen(true)}
-            className="text-blue-500 hover:text-white dark:text-red-400 dark:hover:text-white"
-          >
-            <svg
-              className="h-6 w-6"
-              xmlns="http://www.w3.org/2000/svg"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
+        <div className="bg-gray-200 text-white h-16 grid grid-cols-3 items-center px-4 dark:bg-black">
+          <div>
+            <button
+              onClick={() => setIsOpen(true)}
+              className="text-blue-500 hover:text-white dark:text-red-400 dark:hover:text-white"
             >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth="2"
-                d="M4 6h16M4 12h16M4 18h16"
-              />
-            </svg>
-          </button>
-          <span className="text-xl font-bold flex flex-row gap-5">
-            <Image src={iconCdr} alt="Icon" width={40} height={40} className = "block dark:hidden" />
-            <Image src={iconNegative} alt="Icon" width={40} height={40} className = "hidden dark:block" />
-          </span>
+              <svg
+                className="h-6 w-6"
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth="2"
+                  d="M4 6h16M4 12h16M4 18h16"
+                />
+              </svg>
+            </button>
+          </div>
+          {/* PAYOFF centrato */}
+          <div className="flex justify-center">
+            <Image src={payoff} alt="Payoff" height={50} className="block dark:hidden" />
+            <Image src={payoffNegative} alt="Payoff" height={50} className="hidden dark:block" />
+          </div>
+          {/* Icone a destra */}
+          <div className="flex justify-end gap-4">
+            <span className="text-xl font-bold flex flex-row gap-5">
+              <Image src={iconCdr} alt="Icon" width={40} height={40} className = "block dark:hidden" />
+              <Image src={iconNegative} alt="Icon" width={40} height={40} className = "hidden dark:block" />
+            </span>
+          </div>
         </div>
         <div className="p-4">{children}</div>
       </div>
