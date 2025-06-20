@@ -36,8 +36,8 @@ export default function ImageWithFallback(props: ImageWithFallbackProps) {
     <div
       className={
         hasNotImage
-          ? "flex justify-center items-center w-full max-h-30"
-          : "flex max-h-30"
+          ? "flex justify-center items-center w-full max-h-40"
+          : "flex max-h-40"
       }
       onClick={() => url !== fallback && preview.openModal(url)}
     >
@@ -45,8 +45,8 @@ export default function ImageWithFallback(props: ImageWithFallbackProps) {
         src={url}
         alt=""
         onError={handleError}
-        width={url === fallback ? 50 : 400}
-        height={url === fallback ? 50 : 300}
+        width={url === fallback ? 150 : 400}
+        height={url === fallback ? 150 : 300}
         unoptimized={url !== fallback ? true : undefined}
         className="object-contain"
       />

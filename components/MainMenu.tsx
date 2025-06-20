@@ -3,6 +3,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import React, { useState } from "react";
 import iconCdr from "../app/icon.png";
+import iconNegative from "../app/icon-negative.png";
 import Image from "next/image";
 
 interface MenuEntry {
@@ -23,15 +24,15 @@ export default function Menu({ entries, children }: MenuProps) {
   return (
     <div className="flex">
       <div
-        className={`fixed top-0 left-0 h-full bg-black text-white w-64 transform ${
+        className={`fixed top-0 left-0 h-full bg-gray-400 text-white w-64 transform ${
           isOpen ? "translate-x-0" : "-translate-x-full"
-        } transition-transform duration-300 ease-in-out z-50`}
+        } transition-transform duration-300 ease-in-out z-50 dark:bg-black`}
       >
         <div className="px-4 py-4 flex justify-between items-center">
           <span className="text-lg font-bold">Menu</span>
           <button
             onClick={() => setIsOpen(false)}
-            className="text-white-600 hover:text-red"
+            className="text-white-600 hover:text-gray-300"
           >
             <svg
               className="h-8 w-8"
@@ -57,8 +58,8 @@ export default function Menu({ entries, children }: MenuProps) {
               onClick={() => setIsOpen(false)}
               className={`px-3 py-2 rounded-md flex flex-row gap-5 items-center text-base font-medium transition-all duration-200 ${
                 pathname === entry.href
-                  ? "bg-gray-700 text-white"
-                  : "text-gray-300 hover:bg-red-700 hover:text-white"
+                  ? "bg-blue-500 text-white dark:bg-red-700"
+                  : "text-white hover:bg-blue-500 hover:text-white dark:hover:bg-red-700 dark:hover:text-white"
               }`}
             >
               <span className="text-xl">{entry.icon && entry.icon}</span>
@@ -76,10 +77,10 @@ export default function Menu({ entries, children }: MenuProps) {
       )}
 
       <div className="flex-1">
-        <div className="bg-primary text-white h-16 flex items-center justify-between px-4">
+        <div className="bg-gray-200 text-white h-16 flex items-center justify-between px-4 dark:bg-black">
           <button
             onClick={() => setIsOpen(true)}
-            className="text-gray-400 hover:text-white"
+            className="text-blue-500 hover:text-white dark:text-red-400 dark:hover:text-white"
           >
             <svg
               className="h-6 w-6"
@@ -97,7 +98,8 @@ export default function Menu({ entries, children }: MenuProps) {
             </svg>
           </button>
           <span className="text-xl font-bold flex flex-row gap-5">
-            <Image src={iconCdr} alt="Icon" width={40} height={40} />
+            <Image src={iconCdr} alt="Icon" width={40} height={40} className = "block dark:hidden" />
+            <Image src={iconNegative} alt="Icon" width={40} height={40} className = "hidden dark:block" />
           </span>
         </div>
         <div className="p-4">{children}</div>
