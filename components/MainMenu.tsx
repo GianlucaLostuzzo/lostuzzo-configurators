@@ -2,7 +2,7 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import React, { useState } from "react";
-import iconCdr from "../app/logo.png";
+import iconCdr from "../app/icon.png";
 import Image from "next/image";
 
 interface MenuEntry {
