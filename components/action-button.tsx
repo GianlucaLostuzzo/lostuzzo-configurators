@@ -14,8 +14,8 @@ export default function ActionsButtons(props: ActionDefaultsProps) {
         disabled={disabled}
         className={`px-8 py-3  text-white font-medium rounded-lg shadow-md ${
           !disabled
-            ? "bg-primary hover:bg-primary-hover focus:bg-primary-focus"
-            : "bg-gray-500"
+            ? "bg-blue-500 hover:bg-blue-600 focus:bg-blue-700"
+            : "bg-blue-500"
         } focus:outline-none focus:ring-2`}
       >
         {loading ? "Ricerca..." : "Cerca"}
@@ -24,7 +24,7 @@ export default function ActionsButtons(props: ActionDefaultsProps) {
         <button
           type="button"
           onClick={onReset}
-          className="px-8 py-3 bg-red-700 text-white font-medium rounded-lg shadow-md hover:bg-gray-500 focus:outline-none focus:ring-2 focus:ring-gray-300"
+          className="px-8 py-3 bg-gray-500 text-white font-medium rounded-lg shadow-md hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-gray-300"
         >
           Reset
         </button>
