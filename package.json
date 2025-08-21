@@ -9,6 +9,7 @@
     "lint": "next lint",
     "format": "prettier --write .",
     "prisma:generate": "prisma generate",
+    "prisma:migrate": "prisma migrate dev",
     "postinstall": "prisma generate"
   },
   "dependencies": {
