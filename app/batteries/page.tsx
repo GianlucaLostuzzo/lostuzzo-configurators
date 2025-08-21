@@ -41,9 +41,9 @@ const defaultState: FormState = {
   length: 0,
   width: 0,
   height: 0,
-  lengthTolerance: 15,
-  widthTolerance: 15,
-  heightTolerance: 15,
+  lengthTolerance: 20,
+  widthTolerance: 20,
+  heightTolerance: 20,
   positivePolarity: "",
 };
 
