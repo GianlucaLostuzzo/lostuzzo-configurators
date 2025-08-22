@@ -55,6 +55,16 @@ const defaultState: FormState = {
 
 type SimpleOption = { value: string };
 
+// helper per evitare any e ignorare abort
+const isAbortError = (e: unknown): boolean => {
+  if (e instanceof DOMException) return e.name === "AbortError";
+  if (typeof e === "object" && e !== null && "name" in e) {
+    const name = (e as { name?: string }).name;
+    return name === "AbortError";
+  }
+  return false;
+};
+
 export default function Configurator() {
   const [form, setForm] = useState<FormState>(defaultState);
 
@@ -76,7 +86,7 @@ export default function Configurator() {
         const res = await fetch("/api/batteries/get-all-typologies");
         const json = await res.json();
         setTypologies(json.data ?? []);
-      } catch (e) {
+      } catch (e: unknown) {
         console.error("Failed to load typologies", e);
       }
     })();
@@ -103,8 +113,8 @@ export default function Configurator() {
         );
         const json = await res.json();
         setBrands(json.data ?? []);
-      } catch (e) {
-        if ((e as any)?.name !== "AbortError") {
+      } catch (e: unknown) {
+        if (!isAbortError(e)) {
           console.error("Failed to load brands", e);
         }
       } finally {
@@ -139,8 +149,8 @@ export default function Configurator() {
         });
         const json = await res.json();
         setTechnologies(json.data ?? []);
-      } catch (e) {
-        if ((e as any)?.name !== "AbortError") {
+      } catch (e: unknown) {
+        if (!isAbortError(e)) {
           console.error("Failed to load technologies", e);
         }
       } finally {
@@ -215,7 +225,7 @@ export default function Configurator() {
       const response = await fetch(`/api/batteries/search?${queryParams}`);
       const data = await response.json();
       setResults(data);
-    } catch (error) {
+    } catch (error: unknown) {
       console.error("Search failed:", error);
     } finally {
       setLoading(false);
