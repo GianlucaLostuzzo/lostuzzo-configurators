@@ -5,21 +5,19 @@ import { NextResponse } from "next/server";
 export async function GET(request: Request) {
   const { searchParams } = new URL(request.url);
 
-  const manufacter =
-    searchParams.get("manufacter") || searchParams.get("manufacturer");
   const brand = searchParams.get("brand");
   const model = searchParams.get("model");
 
-  if (!manufacter || !brand || !model) {
+  if (!brand || !model) {
     return new NextResponse(
-      "Missing 'manufacter', 'brand', or 'model' parameters",
+      "Missing 'brand', or 'model' parameters",
       { status: 400 }
     );
   }
 
   try {
     const years = await prisma.epRoofBars.findMany({
-      where: { manufacter, brand, model },
+      where: { brand, model },
       select: { year: true },
       distinct: ["year"],
       orderBy: { year: "asc" },

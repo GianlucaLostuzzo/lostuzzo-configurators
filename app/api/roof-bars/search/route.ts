@@ -6,27 +6,28 @@ type Filter = Parameters<typeof prisma.epRoofBars.findMany>[0];
 
 export async function GET(request: Request) {
   const { searchParams } = new URL(request.url);
-  const manufacturerCar =
-    searchParams.get("manufacterCar") || searchParams.get("manufacturerCar");
+
   const brandCar = searchParams.get("brandCar");
   const modelCar = searchParams.get("modelCar");
   const yearCar = searchParams.get("yearCar");
   const typeBar = searchParams.get("typeBar");
+    const manufacturerCar =
+    searchParams.get("manufacterCar") || searchParams.get("manufacturerCar");
 
-  if (!manufacturerCar || !brandCar || !modelCar || !yearCar) {
+  if (!brandCar || !modelCar || !yearCar) {
     return new NextResponse(
-      "Missing 'manufacturerCar', 'brandCar', 'modelCar' or 'yearCar' parameters",
+      "Missing 'brandCar', 'modelCar' or 'yearCar' parameters",
       { status: 400 }
     );
   }
 
   const filter: Filter = {
     where: {
-      manufacter: manufacturerCar,
       brand: brandCar,
       model: modelCar,
       year: yearCar,
       ...(typeBar && { type: typeBar }),
+      ...(manufacturerCar && { manufacter: manufacturerCar }),
     },
     select: { code: true, brand: true, description: true, img_url: true },
     orderBy: { code: "asc" },
