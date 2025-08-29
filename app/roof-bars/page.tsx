@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useState } from "react";
+import { useCallback, useState, useRef } from "react";
 import { useMountQuery } from "@/hooks/use-mount-query";
 import TextSelector from "@/components/text-selector";
 import PageTitle from "@/components/page-title";
@@ -50,6 +50,18 @@ export default function RoofBarsConfigurator() {
   const [results, setResults] = useState<ApiProductResult | null>(null);
   const [loading, setLoading] = useState(false);
 
+  // Cache e controller per endpoint (abort + cache)
+  const cacheRef = useRef<Map<string, ApiFilterResult>>(new Map());
+  const controllersRef = useRef<Record<string, AbortController>>({});
+
+  const makeCacheKey = (endpoint: string, filters: Record<string, string>) => {
+    const entries = Object.entries(filters)
+      .filter(([, v]) => v != null && v !== "" && v !== "all")
+      .sort(([a], [b]) => a.localeCompare(b));
+    const qs = new URLSearchParams(entries as [string, string][]).toString();
+    return `${endpoint}?${qs}`;
+  };
+
   // Helper per fetch generica delle opzioni
   const fetchOptions = useCallback(
     async (
@@ -57,18 +69,46 @@ export default function RoofBarsConfigurator() {
       filters: Record<string, string>,
       setter: React.Dispatch<React.SetStateAction<ApiFilterResult>>
     ) => {
-      const qs = new URLSearchParams(
-        Object.entries(filters).filter(([, v]) => v && v.length > 0)
-      ).toString();
+      // normalizza e genera chiave cache
+      const clean = Object.fromEntries(
+        Object.entries(filters).filter(([, v]) => v && v !== "all")
+      ) as Record<string, string>;
+      const key = makeCacheKey(endpoint, clean);
+
+      // Cache hit
+      const cached = cacheRef.current.get(key);
+      if (cached) {
+        setter(cached);
+        return;
+      }
+
+      // Abort eventuale richiesta precedente per lo stesso endpoint
+      try {
+        controllersRef.current[endpoint]?.abort();
+      } catch {}
+      const controller = new AbortController();
+      controllersRef.current[endpoint] = controller;
 
       try {
-        const response = await fetch(`${endpoint}?${qs}`);
+        const qs = new URLSearchParams(clean).toString();
+        const url = qs ? `${endpoint}?${qs}` : endpoint;
+
+        const response = await fetch(url, { signal: controller.signal, cache: "no-store" });
+        if (!response.ok) throw new Error(`HTTP ${response.status}`);
+
         const data = (await response.json()) as ApiFilterResult;
-        // Inserisco "all" in testa per poter tornare alla scelta non filtrata
-        setter({ data: [{ value: "all" }, ...(data?.data ?? [])] });
+        const normalized = { data: [{ value: "all" }, ...(data?.data ?? [])] };
+
+        cacheRef.current.set(key, normalized);
+        setter(normalized);
       } catch (e: unknown) {
         if (!isAbortError(e)) console.error("Failed to fetch options", e);
         setter({ data: [{ value: "all" }] }); // fallback minimo
+      } finally {
+        // pulizia controller
+        if (controllersRef.current[endpoint] === controller) {
+          delete controllersRef.current[endpoint];
+        }
       }
     },
     []
@@ -138,12 +178,12 @@ export default function RoofBarsConfigurator() {
         }));
 
         if (value) {
+          // Se vuoi, qui puoi anche accorpare a un /get-summary
           fetchOptions(
             "/api/roof-bars/get-types",
             { brand: form.brand, model: form.model, year: value },
             setTypeOptions
           );
-
           fetchOptions(
             "/api/roof-bars/get-manufacturers",
             { brand: form.brand, model: form.model, year: value },
@@ -154,21 +194,7 @@ export default function RoofBarsConfigurator() {
       }
 
       if (field === "type") {
-        setManufacturerOptions({ data: [] });
-
-        setForm((prev) => ({
-          ...prev,
-          type: value,
-          manufacturer: "",
-        }));
-
-        if (value) {
-          fetchOptions(
-            "/api/roof-bars/get-manufacturers",
-            { brand: form.brand, model: form.model, year: form.year, type: value },
-            setManufacturerOptions
-          );
-        }
+        setForm((prev) => ({ ...prev, type: value }));
         return;
       }
 
@@ -177,11 +203,10 @@ export default function RoofBarsConfigurator() {
         return;
       }
     },
-    [fetchOptions, form.brand, form.model, form.year]
+    [form, fetchOptions]
   );
 
-  // Submit
-  const handleSubmit = useCallback(
+    const handleSubmit = useCallback(
     async (e: React.FormEvent) => {
       e.preventDefault();
       setLoading(true);
@@ -228,7 +253,7 @@ export default function RoofBarsConfigurator() {
 
   return (
     <div className="container mx-auto p-6 max-w-4xl">
-      <PageTitle>Configuratore Barre Tetto</PageTitle>
+      <PageTitle>Configuratore Portaggio</PageTitle>
 
       <form onSubmit={handleSubmit} className="space-y-6">
         <TextSelector
@@ -238,7 +263,6 @@ export default function RoofBarsConfigurator() {
           disabledOptionText="Seleziona una marca"
           onChange={handleChange}
           options={brandOpts.map((x) => x.value)}
-          disabled={false} // la marca è il primo step, mai disabilitata
         />
 
         <TextSelector
@@ -255,7 +279,7 @@ export default function RoofBarsConfigurator() {
           id="year"
           label="Anno"
           value={form.year || "all"}
-          disabledOptionText="Seleziona un anno"
+          disabledOptionText="Seleziona l'anno di produzione"
           onChange={handleChange}
           options={yearOptions.data.map((x) => x.value)}
           disabled={!form.model}
@@ -263,9 +287,9 @@ export default function RoofBarsConfigurator() {
 
         <TextSelector
           id="type"
-          label="Tipo (opzionale)"
+          label="Tipo"
           value={form.type || "all"}
-          disabledOptionText="Seleziona un tipo (opzionale)"
+          disabledOptionText="Seleziona una tipologia di prodotto"
           onChange={handleChange}
           options={typeOptions.data.map((x) => x.value)}
           disabled={!form.year}

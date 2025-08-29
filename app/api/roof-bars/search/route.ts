@@ -29,7 +29,7 @@ export async function GET(request: Request) {
       ...(typeBar && { type: typeBar }),
       ...(manufacturerCar && { manufacter: manufacturerCar }),
     },
-    select: { code: true, brand: true, description: true, img_url: true },
+    select: { code: true, brand: true, description: true, img_url: true, manufacter: true },
     orderBy: { code: "asc" },
   };
 
@@ -49,6 +49,7 @@ export async function GET(request: Request) {
           product_code: r.code,
           brand: r.brand,
           description: r.description,
+          manufacter: r.manufacter,
           image: r.img_url ?? `ep_roof_bars/${r.code}.jpg`,
         })),
       }),

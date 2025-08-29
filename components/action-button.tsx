@@ -14,8 +14,8 @@ export default function ActionsButtons(props: ActionDefaultsProps) {
         disabled={disabled}
         className={`px-8 py-3  text-white font-medium rounded-lg shadow-md ${
           !disabled
-            ? "bg-blue-500 hover:bg-blue-600 focus:bg-blue-700"
-            : "bg-blue-500"
+            ? "bg-blue-600 hover:bg-blue-700 focus:bg-blue-800"
+            : "bg-blue-600"
         } focus:outline-none focus:ring-2`}
       >
         {loading ? "Ricerca..." : "Cerca"}

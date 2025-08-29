@@ -52,6 +52,9 @@ export default function ResultsSection(props: ResultsSectionProps) {
                   />
                 </div>
                 <div className="p-4 text-center">
+                  <span className="block text-lg font-medium text-gray-800 mb-2 text-blue-600">
+                    {product.manufacter}
+                  </span>
                   <span className="block text-lg font-medium text-gray-800 mb-2">
                     {product.product_code}
                   </span>

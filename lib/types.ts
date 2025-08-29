@@ -4,6 +4,7 @@ export type ApiProductResult = {
     product_code: string;
     image?: string;
     brand?: string;
+    manufacter?: string;
   }[];
 };
 
