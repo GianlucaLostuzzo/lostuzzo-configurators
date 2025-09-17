@@ -11,7 +11,7 @@ export async function GET(request: Request) {
   const modelCar = searchParams.get("modelCar");
   const yearCar = searchParams.get("yearCar");
   const typeBar = searchParams.get("typeBar");
-    const manufacturerCar =
+  const manufacturerCar =
     searchParams.get("manufacterCar") || searchParams.get("manufacturerCar");
 
   if (!brandCar || !modelCar || !yearCar) {
@@ -29,7 +29,14 @@ export async function GET(request: Request) {
       ...(typeBar && { type: typeBar }),
       ...(manufacturerCar && { manufacter: manufacturerCar }),
     },
-    select: { code: true, brand: true, description: true, img_url: true, manufacter: true },
+    select: {
+      code: true,
+      brand: true,
+      description: true,
+      img_url: true,
+      manufacter: true,
+    },
+    distinct: ["code"],
     orderBy: { code: "asc" },
   };
 
