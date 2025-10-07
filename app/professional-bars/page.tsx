@@ -39,10 +39,6 @@ export default function ProfessionalBarsConfigurator() {
   // Opzioni dipendenti
   const [modelOptions, setModelOptions] = useState<ApiFilterResult>({ data: [] });
   const [yearOptions, setYearOptions] = useState<ApiFilterResult>({ data: [] });
-  const [typeOptions, setTypeOptions] = useState<ApiFilterResult>({ data: [] });
-  const [manufacturerOptions, setManufacturerOptions] = useState<ApiFilterResult>({
-    data: [],
-  });
 
   const [results, setResults] = useState<ApiProductResult | null>(null);
   const [loading, setLoading] = useState(false);
@@ -122,8 +118,6 @@ export default function ProfessionalBarsConfigurator() {
         // reset a cascata
         setModelOptions({ data: [] });
         setYearOptions({ data: [] });
-        setTypeOptions({ data: [] });
-        setManufacturerOptions({ data: [] });
 
         setForm((prev) => ({
           ...prev,
@@ -140,8 +134,6 @@ export default function ProfessionalBarsConfigurator() {
 
       if (field === "model") {
         setYearOptions({ data: [] });
-        setTypeOptions({ data: [] });
-        setManufacturerOptions({ data: [] });
 
         setForm((prev) => ({
           ...prev,
@@ -207,8 +199,6 @@ export default function ProfessionalBarsConfigurator() {
     setForm({ brand: "", model: "", year: ""});
     setModelOptions({ data: [] });
     setYearOptions({ data: [] });
-    setTypeOptions({ data: [] });
-    setManufacturerOptions({ data: [] });
     setResults(null);
   }, []);
 
