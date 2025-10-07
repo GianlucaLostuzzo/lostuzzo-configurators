@@ -3,7 +3,7 @@ import { BsUmbrella } from "react-icons/bs";
 import { GiTowTruck, GiCarWheel, GiCarBattery } from "react-icons/gi";
 import { MdOutlineSdCard } from "react-icons/md";
 import { LiaRoadSolid, LiaOilCanSolid } from "react-icons/lia";
-import { FaTaxi } from "react-icons/fa";
+import { FaTaxi, FaTruck } from "react-icons/fa";
 
 export const menuEntries = [
   {
@@ -40,6 +40,11 @@ export const menuEntries = [
     label: "Portaggio e carico",
     href: "/roof-bars",
     icon: <BiPackage />,
+  },
+  {
+    label: "Portaggio veicoli commerciali",
+    href: "/professional-bars",
+    icon: <FaTruck />,
   },
   {
     label: "Tappetini auto",

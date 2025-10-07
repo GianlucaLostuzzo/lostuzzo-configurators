@@ -5,6 +5,11 @@ export type ApiProductResult = {
     image?: string;
     brand?: string;
     manufacter?: string;
+    manufacturer?: string;
+    fixTypes?: Array<{
+      code: string;
+      type: number;
+    }>;
   }[];
 };
 

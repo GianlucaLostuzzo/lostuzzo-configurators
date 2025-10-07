@@ -6,13 +6,14 @@ import { ApiProductResult } from "@/lib/types";
 
 const PAGE_SIZE = 9;
 const STATIC_URL = process.env.NEXT_PUBLIC_STATIC_URL;
+const DEFAULT_FIXING_IMAGE = "https://s3.eu-central-1.amazonaws.com/static.configuratori.cdrtorino.com/ep_professional_bars/fixing.jpg";
 
 export interface ResultsSectionProps {
   results?: ApiProductResult | null;
   loading?: boolean;
 }
 
-export default function ResultsSection(props: ResultsSectionProps) {
+export default function ResultsSpecial(props: ResultsSectionProps) {
   const { loading = false, results } = props;
   const [visibleCount, setVisibleCount] = useState(PAGE_SIZE);
 
@@ -30,6 +31,21 @@ export default function ResultsSection(props: ResultsSectionProps) {
     setVisibleCount((prev) => prev + PAGE_SIZE);
   };
 
+  const getFixingTypeName = (type: number): string => {
+    return `Posizione fissaggio: ${type}`;
+  };
+
+  // 1. Products for current page
+  const visibleProducts = results.data.slice(0, visibleCount);
+
+  // 2. Unique fixing types (once, not per product)
+  const allFixTypes = results.data[0]?.fixTypes || [];
+  const uniqueFixTypes = Array.from(
+    new Map(
+        allFixTypes.map(fix => [`${fix.code}_${fix.type}`, fix])
+    ).values()
+    );
+
   return (
     <div className="mt-10">
       <h2 className="text-2xl font-bold text-center text-primary mb-6">
@@ -37,23 +53,22 @@ export default function ResultsSection(props: ResultsSectionProps) {
       </h2>
       {results.data.length > 0 ? (
         <>
+          {/* Product Grid */}
           <div className="mt-4 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {results.data.slice(0, visibleCount).map((product, i) => (
+            {visibleProducts.map((product, i) => (
               <div
-                key={`result_${product.product_code}_${i}`}
+                key={`product_${product.product_code}_${i}`}
                 className="bg-white shadow-lg rounded-lg overflow-hidden transition-transform transform border hover:scale-105"
               >
                 <div className="w-full h-48 relative flex">
                   <ImageWithFallback
                     brand={product.brand}
-                    href={
-                      product.image ? `${STATIC_URL}/${product.image}` : null
-                    }
+                    href={product.image ? `${STATIC_URL}/${product.image}` : null}
                   />
                 </div>
                 <div className="p-4 text-center">
                   <span className="block text-lg font-medium text-gray-800 mb-2 text-blue-600">
-                    {product.manufacter}
+                    {product.manufacturer}
                   </span>
                   <span className="block text-lg font-medium text-gray-800 mb-2">
                     {product.product_code}
@@ -72,7 +87,39 @@ export default function ResultsSection(props: ResultsSectionProps) {
                 </div>
               </div>
             ))}
+            {uniqueFixTypes.map((fixing, idx) => (
+                  <div
+                    key={`fixing_${fixing.code}_${idx}`}
+                    className="bg-gradient-to-br from-orange-50 to-orange-100 shadow-lg rounded-lg overflow-hidden transition-transform transform border-2 border-orange-300 hover:scale-105"
+                  >
+                    <div className="w-full h-48 relative flex bg-orange-100">
+                      <ImageWithFallback
+                        href={DEFAULT_FIXING_IMAGE}
+                      />
+                    </div>
+                    <div className="p-4 text-center">
+                      <span className="block text-xs font-semibold text-orange-700 mb-1 uppercase">
+                        Kit Fissaggio
+                      </span>
+                      <span className="block text-lg font-medium text-gray-800 mb-2">
+                        {fixing.code}
+                      </span>
+                      <span className="block text-sm font-light text-gray-600 mb-2 min-h-10">
+                        {getFixingTypeName(fixing.type)}
+                      </span>
+                      <button
+                        onClick={() => handleCopy(fixing.code)}
+                        className="text-gray-500 hover:text-primary focus:outline-none flex items-center justify-center gap-2 border px-4 py-2 rounded-md w-full bg-white"
+                        aria-label={`Copy code ${fixing.code}`}
+                      >
+                        <BiCopy size={20} />
+                        Copia codice
+                      </button>
+                    </div>
+                  </div>
+                ))}
           </div>
+          {/* Load More Button */}
           {visibleCount < results.data.length && (
             <div className="flex justify-center mt-6">
               <button
