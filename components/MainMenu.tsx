@@ -103,15 +103,19 @@ export default function Menu({ entries, children }: MenuProps) {
           </div>
           {/* PAYOFF centrato */}
           <div className="flex justify-center">
-            <Image src={payoff} alt="Payoff" height={50} className="block dark:hidden" />
-            <Image src={payoffNegative} alt="Payoff" height={50} className="hidden dark:block" />
+            <a href="/" rel="noopener noreferrer">
+              <Image src={payoff} alt="Payoff" height={50} className="block dark:hidden" />
+              <Image src={payoffNegative} alt="Payoff" height={50} className="hidden dark:block" />
+            </a>
           </div>
           {/* Icone a destra */}
           <div className="flex justify-end gap-4">
-            <span className="text-xl font-bold flex flex-row gap-5">
-              <Image src={iconCdr} alt="Icon" width={40} height={40} className = "block dark:hidden" />
-              <Image src={iconNegative} alt="Icon" width={40} height={40} className = "hidden dark:block" />
-            </span>
+            <a href="https://cdrtorino.com" target="_blank" rel="noopener noreferrer">
+              <span className="text-xl font-bold flex flex-row gap-5">
+                <Image src={iconCdr} alt="Icon" width={40} height={40} className = "block dark:hidden" />
+                <Image src={iconNegative} alt="Icon" width={40} height={40} className = "hidden dark:block" />
+              </span>
+            </a>
           </div>
         </div>
         <div className="p-4">{children}</div>

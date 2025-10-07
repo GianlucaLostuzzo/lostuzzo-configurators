@@ -180,3 +180,22 @@ model EpLog {
 
     @@map("ep_log")
 }
+
+model EpProfessionalBars {
+    id           BigInt    @id
+    manufacturer String    @db.VarChar(20)
+    brand        String    @db.VarChar(20)
+    model        String    @db.VarChar(255)
+    year         String    @db.VarChar(20)
+    product_code String    @db.VarChar(100)
+    description  String?   @db.VarChar(255)
+    fix_type1    String?   @db.VarChar(255)
+    fix_type2    String?   @db.VarChar(255)
+    fix_type3    String?   @db.VarChar(255)
+    fix_type4    String?   @db.VarChar(255)
+    fix_type5    String?   @db.VarChar(255)
+    fix_type6    String?   @db.VarChar(255)
+    img_url      String?   @db.Text
+
+    @@map("ep_professional_bars")
+}
