@@ -134,6 +134,7 @@ model EpSnowChains {
     product_code   String?   @db.VarChar(255)
     typology       String?   @db.VarChar(255)
     img_url        String?   @db.Text
+    brand          String?   @db.VarChar(255)
 
     @@map("ep_snow_chains")
 }
