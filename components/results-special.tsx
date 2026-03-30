@@ -10,6 +10,7 @@ const DEFAULT_FIXING_IMAGE = "https://s3.eu-central-1.amazonaws.com/static.confi
 
 export interface ResultsSectionProps {
   results?: ApiProductResult | null;
+  manufacturer?: string;
   loading?: boolean;
 }
 

@@ -13,6 +13,7 @@ type FormState = {
   brand: string;
   model: string;
   year: string;
+  manufacturer?: string;
 };
 
 const isAbortError = (e: unknown): boolean => {
@@ -29,6 +30,7 @@ export default function ProfessionalBarsConfigurator() {
     brand: "",
     model: "",
     year: "",
+    manufacturer: "",
   });
 
   // Marca: lista iniziale
@@ -39,6 +41,7 @@ export default function ProfessionalBarsConfigurator() {
   // Opzioni dipendenti
   const [modelOptions, setModelOptions] = useState<ApiFilterResult>({ data: [] });
   const [yearOptions, setYearOptions] = useState<ApiFilterResult>({ data: [] });
+  const [manufacturerOptions, setManufacturerOptions] = useState<ApiFilterResult>({ data: [] });
 
   const [results, setResults] = useState<ApiProductResult | null>(null);
   const [loading, setLoading] = useState(false);
@@ -118,12 +121,14 @@ export default function ProfessionalBarsConfigurator() {
         // reset a cascata
         setModelOptions({ data: [] });
         setYearOptions({ data: [] });
+        setManufacturerOptions({ data: [] });
 
         setForm((prev) => ({
           ...prev,
           brand: value,
           model: "",
           year: "",
+          manufacturer: "",
         }));
 
         if (value) {
@@ -139,7 +144,6 @@ export default function ProfessionalBarsConfigurator() {
           ...prev,
           model: value,
           year: "",
-          type: "",
           manufacturer: "",
         }));
 
@@ -154,9 +158,28 @@ export default function ProfessionalBarsConfigurator() {
       }
 
       if (field === "year") {
+        setManufacturerOptions({ data: [] });
+
         setForm((prev) => ({
           ...prev,
           year: value,
+          manufacturer: "",
+        }));
+
+        if (value) {
+          fetchOptions(
+            "/api/professional-bars/get-manufacturers",
+            { brand: form.brand, model: form.model, year: form.year },
+            setManufacturerOptions
+          );
+        }
+        return;
+      }
+
+      if (field === "manufacturer") {
+        setForm((prev) => ({
+          ...prev,
+          manufacturer: value,
         }));
         return;
       }
@@ -173,6 +196,7 @@ export default function ProfessionalBarsConfigurator() {
         brand: "brandCar",
         model: "modelCar",
         year: "yearCar",
+        manufacturer: "manufacturer",
       };
 
       const qs = new URLSearchParams(
@@ -199,6 +223,7 @@ export default function ProfessionalBarsConfigurator() {
     setForm({ brand: "", model: "", year: ""});
     setModelOptions({ data: [] });
     setYearOptions({ data: [] });
+    setManufacturerOptions({ data: [] });
     setResults(null);
   }, []);
 
@@ -239,9 +264,19 @@ export default function ProfessionalBarsConfigurator() {
           disabled={!form.model}
         />
 
+        <TextSelector
+          id="manufacturer"
+          label="Produttore"
+          value={form.manufacturer || "all"}
+          disabledOptionText="Seleziona un produttore"
+          onChange={handleChange}
+          options={manufacturerOptions.data.map((x) => x.value)}
+          disabled={!form.model}
+        />
+
         <ActionsButtons
           loading={loading}
-          disabled={!form.brand || !form.model || !form.year }
+          disabled={!form.brand || !form.model || !form.year || !form.manufacturer}
           onReset={resetAll}
         />
       </form>

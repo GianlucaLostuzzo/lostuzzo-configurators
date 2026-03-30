@@ -10,6 +10,7 @@ export async function GET(request: Request) {
   const brandCar = searchParams.get("brandCar");
   const modelCar = searchParams.get("modelCar");
   const yearCar = searchParams.get("yearCar");
+  const manufacturer = searchParams.get("manufacturer");
 
   if (!brandCar || !modelCar || !yearCar) {
     return new NextResponse(
@@ -23,6 +24,7 @@ export async function GET(request: Request) {
       brand: brandCar,
       model: modelCar,
       year: yearCar,
+      manufacturer: manufacturer || undefined,
     },
     select: {
       product_code: true,
