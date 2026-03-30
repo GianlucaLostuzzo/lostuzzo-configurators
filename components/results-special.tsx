@@ -1,26 +1,42 @@
 import { enqueueSnackbar } from "notistack";
 import { BiCopy } from "react-icons/bi";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import ImageWithFallback from "./image-with-fallback";
 import { ApiProductResult } from "@/lib/types";
 
 const PAGE_SIZE = 9;
 const STATIC_URL = process.env.NEXT_PUBLIC_STATIC_URL;
-const DEFAULT_FIXING_IMAGE = "https://s3.eu-central-1.amazonaws.com/static.configuratori.cdrtorino.com/ep_professional_bars/fixing.jpg";
+const DEFAULT_FIXING_IMAGE =
+  "https://s3.eu-central-1.amazonaws.com/static.configuratori.cdrtorino.com/ep_professional_bars/fixing.jpg";
+
+// Mappa tipo fissaggio → immagine specifica. Aggiungi qui le chiavi per ogni type.
+const FIXING_IMAGE_BY_TYPE: Record<number, string> = {
+  // 1: "https://s3.eu-central-1.amazonaws.com/.../fixing_type1.jpg",
+  // 2: "https://s3.eu-central-1.amazonaws.com/.../fixing_type2.jpg",
+};
+
+const getFixingImage = (type: number): string =>
+  FIXING_IMAGE_BY_TYPE[type] ?? DEFAULT_FIXING_IMAGE;
+
+const getFixingTypeName = (type: number): string =>
+  `Posizione fissaggio: ${type}`;
 
 export interface ResultsSectionProps {
   results?: ApiProductResult | null;
-  manufacturer?: string;
   loading?: boolean;
+  manufacturer?: string;
 }
 
 export default function ResultsSpecial(props: ResultsSectionProps) {
-  const { loading = false, results } = props;
+  const { loading = false, results, manufacturer } = props;
   const [visibleCount, setVisibleCount] = useState(PAGE_SIZE);
 
-  if (!results) {
-    return <></>;
-  }
+  // Reset paginazione quando cambia il filtro manufacturer
+  useEffect(() => {
+    setVisibleCount(PAGE_SIZE);
+  }, [manufacturer]);
+
+  if (!results) return <></>;
 
   const handleCopy = (code: string) => {
     navigator.clipboard
@@ -32,20 +48,24 @@ export default function ResultsSpecial(props: ResultsSectionProps) {
     setVisibleCount((prev) => prev + PAGE_SIZE);
   };
 
-  const getFixingTypeName = (type: number): string => {
-    return `Posizione fissaggio: ${type}`;
-  };
+  // Filtra i prodotti per produttore se selezionato
+  const filteredProducts =
+    manufacturer && manufacturer !== "all"
+      ? results.data.filter((p) => p.manufacturer === manufacturer)
+      : results.data;
 
-  // 1. Products for current page
-  const visibleProducts = results.data.slice(0, visibleCount);
+  // Fix types estratti solo dai prodotti filtrati (fallback su tutti se filtro non produce risultati)
+  const sourceProducts =
+    filteredProducts.length > 0 ? filteredProducts : results.data;
 
-  // 2. Unique fixing types (once, not per product)
-  const allFixTypes = results.data[0]?.fixTypes || [];
+  const allFixTypes = sourceProducts.flatMap((p) => p.fixTypes || []);
   const uniqueFixTypes = Array.from(
     new Map(
-        allFixTypes.map(fix => [`${fix.code}_${fix.type}`, fix])
+      allFixTypes.map((fix) => [`${fix.code}_${fix.type}`, fix])
     ).values()
-    );
+  );
+
+  const visibleProducts = filteredProducts.slice(0, visibleCount);
 
   return (
     <div className="mt-10">
@@ -54,8 +74,8 @@ export default function ResultsSpecial(props: ResultsSectionProps) {
       </h2>
       {results.data.length > 0 ? (
         <>
-          {/* Product Grid */}
           <div className="mt-4 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {/* Prodotti */}
             {visibleProducts.map((product, i) => (
               <div
                 key={`product_${product.product_code}_${i}`}
@@ -64,7 +84,9 @@ export default function ResultsSpecial(props: ResultsSectionProps) {
                 <div className="w-full h-48 relative flex">
                   <ImageWithFallback
                     brand={product.brand}
-                    href={product.image ? `${STATIC_URL}/${product.image}` : null}
+                    href={
+                      product.image ? `${STATIC_URL}/${product.image}` : null
+                    }
                   />
                 </div>
                 <div className="p-4 text-center">
@@ -88,40 +110,41 @@ export default function ResultsSpecial(props: ResultsSectionProps) {
                 </div>
               </div>
             ))}
+
+            {/* Kit fissaggio filtrati per produttore */}
             {uniqueFixTypes.map((fixing, idx) => (
-                  <div
-                    key={`fixing_${fixing.code}_${idx}`}
-                    className="bg-gradient-to-br from-orange-50 to-orange-100 shadow-lg rounded-lg overflow-hidden transition-transform transform border-2 border-orange-300 hover:scale-105"
+              <div
+                key={`fixing_${fixing.code}_${idx}`}
+                className="bg-gradient-to-br from-orange-50 to-orange-100 shadow-lg rounded-lg overflow-hidden transition-transform transform border-2 border-orange-300 hover:scale-105"
+              >
+                <div className="w-full h-48 relative flex bg-orange-100">
+                  <ImageWithFallback href={getFixingImage(fixing.type)} />
+                </div>
+                <div className="p-4 text-center">
+                  <span className="block text-xs font-semibold text-orange-700 mb-1 uppercase">
+                    Kit Fissaggio
+                  </span>
+                  <span className="block text-lg font-medium text-gray-800 mb-2">
+                    {fixing.code}
+                  </span>
+                  <span className="block text-sm font-light text-gray-600 mb-2 min-h-10">
+                    {getFixingTypeName(fixing.type)}
+                  </span>
+                  <button
+                    onClick={() => handleCopy(fixing.code)}
+                    className="text-gray-500 hover:text-primary focus:outline-none flex items-center justify-center gap-2 border px-4 py-2 rounded-md w-full bg-white"
+                    aria-label={`Copy code ${fixing.code}`}
                   >
-                    <div className="w-full h-48 relative flex bg-orange-100">
-                      <ImageWithFallback
-                        href={DEFAULT_FIXING_IMAGE}
-                      />
-                    </div>
-                    <div className="p-4 text-center">
-                      <span className="block text-xs font-semibold text-orange-700 mb-1 uppercase">
-                        Kit Fissaggio
-                      </span>
-                      <span className="block text-lg font-medium text-gray-800 mb-2">
-                        {fixing.code}
-                      </span>
-                      <span className="block text-sm font-light text-gray-600 mb-2 min-h-10">
-                        {getFixingTypeName(fixing.type)}
-                      </span>
-                      <button
-                        onClick={() => handleCopy(fixing.code)}
-                        className="text-gray-500 hover:text-primary focus:outline-none flex items-center justify-center gap-2 border px-4 py-2 rounded-md w-full bg-white"
-                        aria-label={`Copy code ${fixing.code}`}
-                      >
-                        <BiCopy size={20} />
-                        Copia codice
-                      </button>
-                    </div>
-                  </div>
-                ))}
+                    <BiCopy size={20} />
+                    Copia codice
+                  </button>
+                </div>
+              </div>
+            ))}
           </div>
-          {/* Load More Button */}
-          {visibleCount < results.data.length && (
+
+          {/* Load More */}
+          {visibleCount < filteredProducts.length && (
             <div className="flex justify-center mt-6">
               <button
                 onClick={handleLoadMore}
