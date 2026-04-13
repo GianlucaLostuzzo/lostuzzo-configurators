@@ -1,8 +1,10 @@
 import { enqueueSnackbar } from "notistack";
 import { BiCopy } from "react-icons/bi";
+import { CiSettings } from "react-icons/ci";
 import { useState } from "react";
 import ImageWithFallback from "./image-with-fallback";
 import { ApiProductResult } from "@/lib/types";
+import { usePathname } from "next/navigation";
 
 const PAGE_SIZE = 9;
 const STATIC_URL = process.env.NEXT_PUBLIC_STATIC_URL;
@@ -12,9 +14,17 @@ export interface ResultsSectionProps {
   loading?: boolean;
 }
 
+const getDatasheetUrl = (productCode: string): string => {
+  const baseUrl = "/api/roof-bars/get-datasheet";
+  const params = new URLSearchParams({ product: productCode });
+  return `${baseUrl}?${params.toString()}`;
+};
+
 export default function ResultsSection(props: ResultsSectionProps) {
   const { loading = false, results } = props;
   const [visibleCount, setVisibleCount] = useState(PAGE_SIZE);
+  const pathname = usePathname();
+  const showDatasheet = pathname === "/roof-bars" || pathname === "/car-trunks"; // o qualunque sia il path
 
   if (!results) {
     return <></>;
@@ -69,6 +79,14 @@ export default function ResultsSection(props: ResultsSectionProps) {
                     <BiCopy size={20} />
                     Copia codice
                   </button>
+                  {showDatasheet && (
+                    <a 
+                      className = "mt-2 text-gray-500 hover:text-primary focus:outline-none flex items-center justify-center gap-2 border px-4 py-2 rounded-md w-full"
+                      href={getDatasheetUrl(product.product_code)} target="_blank" rel="noopener noreferrer">
+                      <CiSettings size={22} />
+                      Scheda tecnica
+                    </a>
+                  )}
                 </div>
               </div>
             ))}
