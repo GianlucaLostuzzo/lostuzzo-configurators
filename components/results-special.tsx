@@ -9,18 +9,64 @@ const STATIC_URL = process.env.NEXT_PUBLIC_STATIC_URL;
 const DEFAULT_FIXING_IMAGE =
   "https://s3.eu-central-1.amazonaws.com/static.configuratori.cdrtorino.com/ep_professional_bars/fixing.jpg";
 
-// Mappa tipo fissaggio → immagine specifica. Aggiungi qui le chiavi per ogni type.
+// ─────────────────────────────────────────────────────────────────────────────
+// Mappa produttore → tipo fissaggio → descrizione e immagine specifica.
+// La chiave produttore va in MAIUSCOLO (il confronto viene normalizzato).
+// imageUrl è opzionale: se assente si usa il fallback per tipo o quello globale.
+// ─────────────────────────────────────────────────────────────────────────────
+type FixingDescriptor = {
+  description: string;
+  imageUrl?: string;
+};
+
+const FIXING_DESCRIPTIONS: Record<string, Record<number, FixingDescriptor>> = {
+  FABBRI: {
+    1: { description: "Kit fissaggio per configurazione a 2 barre" },
+    2: { description: "Kit fissaggio per configurazione a 3 barre" },
+    3: {
+      description: "Kit fissaggio per configurazione a 4 barre (prenderne 2)",
+    },
+    4: { description: "Kit fissaggio per 5 barre A" },
+    5: { description: "Kit fissaggio per 5 barre B" },
+  },
+};
+
+// Fallback per tipo (senza produttore specifico)
 const FIXING_IMAGE_BY_TYPE: Record<number, string> = {
   // 1: "https://s3.eu-central-1.amazonaws.com/.../fixing_type1.jpg",
   // 2: "https://s3.eu-central-1.amazonaws.com/.../fixing_type2.jpg",
 };
 
-const getFixingImage = (type: number): string =>
-  FIXING_IMAGE_BY_TYPE[type] ?? DEFAULT_FIXING_IMAGE;
+const DEFAULT_FIXING_DESCRIPTIONS: Record<number, string> = {
+  1: "Posizione fissaggio: 1",
+  2: "Posizione fissaggio: 2",
+};
 
-const getFixingTypeName = (type: number): string =>
-  `Posizione fissaggio: ${type}`;
+// ─────────────────────────────────────────────────────────────────────────────
+// Helpers
+// ─────────────────────────────────────────────────────────────────────────────
+const getFixingDescription = (type: number, manufacturer?: string): string => {
+  if (manufacturer) {
+    const desc =
+      FIXING_DESCRIPTIONS[manufacturer.toUpperCase()]?.[type]?.description;
+    if (desc) return desc;
+  }
+  return DEFAULT_FIXING_DESCRIPTIONS[type] ?? `Posizione fissaggio: ${type}`;
+};
 
+const getFixingImage = (type: number, manufacturer?: string): string => {
+  if (manufacturer == "FABBRI") {
+    const imageUrl =
+      process.env.NEXT_PUBLIC_STATIC_URL +
+      "/ep_professional_bars/fix_fabbri.jpg";
+    if (imageUrl) return imageUrl;
+  }
+  return FIXING_IMAGE_BY_TYPE[type] ?? DEFAULT_FIXING_IMAGE;
+};
+
+// ─────────────────────────────────────────────────────────────────────────────
+// Component
+// ─────────────────────────────────────────────────────────────────────────────
 export interface ResultsSectionProps {
   results?: ApiProductResult | null;
   loading?: boolean;
@@ -31,6 +77,8 @@ export default function ResultsSpecial(props: ResultsSectionProps) {
   const { loading = false, results, manufacturer } = props;
   const [visibleCount, setVisibleCount] = useState(PAGE_SIZE);
 
+  console.log("ResultsSpecial manufacturer prop:", manufacturer);
+  console.log("ResultsSpecial results sample:", results?.data?.[0]);
   // Reset paginazione quando cambia il filtro manufacturer
   useEffect(() => {
     setVisibleCount(PAGE_SIZE);
@@ -54,15 +102,12 @@ export default function ResultsSpecial(props: ResultsSectionProps) {
       ? results.data.filter((p) => p.manufacturer === manufacturer)
       : results.data;
 
-  // Fix types estratti solo dai prodotti filtrati (fallback su tutti se filtro non produce risultati)
+  // Fix types estratti solo dai prodotti filtrati
   const sourceProducts =
     filteredProducts.length > 0 ? filteredProducts : results.data;
-
   const allFixTypes = sourceProducts.flatMap((p) => p.fixTypes || []);
   const uniqueFixTypes = Array.from(
-    new Map(
-      allFixTypes.map((fix) => [`${fix.code}_${fix.type}`, fix])
-    ).values()
+    new Map(allFixTypes.map((fix) => [`${fix.code}_${fix.type}`, fix])).values()
   );
 
   const visibleProducts = filteredProducts.slice(0, visibleCount);
@@ -111,14 +156,16 @@ export default function ResultsSpecial(props: ResultsSectionProps) {
               </div>
             ))}
 
-            {/* Kit fissaggio filtrati per produttore */}
+            {/* Kit fissaggio */}
             {uniqueFixTypes.map((fixing, idx) => (
               <div
                 key={`fixing_${fixing.code}_${idx}`}
                 className="bg-gradient-to-br from-orange-50 to-orange-100 shadow-lg rounded-lg overflow-hidden transition-transform transform border-2 border-orange-300 hover:scale-105"
               >
                 <div className="w-full h-48 relative flex bg-orange-100">
-                  <ImageWithFallback href={getFixingImage(fixing.type)} />
+                  <ImageWithFallback
+                    href={getFixingImage(fixing.type, manufacturer)}
+                  />
                 </div>
                 <div className="p-4 text-center">
                   <span className="block text-xs font-semibold text-orange-700 mb-1 uppercase">
@@ -128,7 +175,7 @@ export default function ResultsSpecial(props: ResultsSectionProps) {
                     {fixing.code}
                   </span>
                   <span className="block text-sm font-light text-gray-600 mb-2 min-h-10">
-                    {getFixingTypeName(fixing.type)}
+                    {getFixingDescription(fixing.type, manufacturer)}
                   </span>
                   <button
                     onClick={() => handleCopy(fixing.code)}

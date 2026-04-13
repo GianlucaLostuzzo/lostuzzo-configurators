@@ -39,9 +39,12 @@ export default function ProfessionalBarsConfigurator() {
   );
 
   // Opzioni dipendenti
-  const [modelOptions, setModelOptions] = useState<ApiFilterResult>({ data: [] });
+  const [modelOptions, setModelOptions] = useState<ApiFilterResult>({
+    data: [],
+  });
   const [yearOptions, setYearOptions] = useState<ApiFilterResult>({ data: [] });
-  const [manufacturerOptions, setManufacturerOptions] = useState<ApiFilterResult>({ data: [] });
+  const [manufacturerOptions, setManufacturerOptions] =
+    useState<ApiFilterResult>({ data: [] });
 
   const [results, setResults] = useState<ApiProductResult | null>(null);
   const [loading, setLoading] = useState(false);
@@ -89,7 +92,10 @@ export default function ProfessionalBarsConfigurator() {
         const qs = new URLSearchParams(clean).toString();
         const url = qs ? `${endpoint}?${qs}` : endpoint;
 
-        const response = await fetch(url, { signal: controller.signal, cache: "no-store" });
+        const response = await fetch(url, {
+          signal: controller.signal,
+          cache: "no-store",
+        });
         if (!response.ok) throw new Error(`HTTP ${response.status}`);
 
         const data = (await response.json()) as ApiFilterResult;
@@ -132,7 +138,11 @@ export default function ProfessionalBarsConfigurator() {
         }));
 
         if (value) {
-          fetchOptions("/api/professional-bars/get-models", { brand: value }, setModelOptions);
+          fetchOptions(
+            "/api/professional-bars/get-models",
+            { brand: value },
+            setModelOptions
+          );
         }
         return;
       }
@@ -187,7 +197,7 @@ export default function ProfessionalBarsConfigurator() {
     [form, fetchOptions]
   );
 
-    const handleSubmit = useCallback(
+  const handleSubmit = useCallback(
     async (e: React.FormEvent) => {
       e.preventDefault();
       setLoading(true);
@@ -198,7 +208,7 @@ export default function ProfessionalBarsConfigurator() {
         year: "yearCar",
         manufacturer: "manufacturer",
       };
-
+      console.log("Submitting manufacturer:", form.manufacturer);
       const qs = new URLSearchParams(
         (Object.entries(form) as [keyof FormState, string][])
           .filter(([, v]) => v && v.length > 0)
@@ -220,7 +230,7 @@ export default function ProfessionalBarsConfigurator() {
 
   // Reset totale
   const resetAll = useCallback(() => {
-    setForm({ brand: "", model: "", year: ""});
+    setForm({ brand: "", model: "", year: "" });
     setModelOptions({ data: [] });
     setYearOptions({ data: [] });
     setManufacturerOptions({ data: [] });
@@ -276,20 +286,34 @@ export default function ProfessionalBarsConfigurator() {
 
         <ActionsButtons
           loading={loading}
-          disabled={!form.brand || !form.model || !form.year || !form.manufacturer}
+          disabled={
+            !form.brand || !form.model || !form.year || !form.manufacturer
+          }
           onReset={resetAll}
         />
       </form>
       <div className="flex justify-center">
-        <Image src={"/fixing_points.png"} alt="Barre veicoli commerciali" width={400} height={400} className="m-10" />
+        <Image
+          src={"/fixing_points.png"}
+          alt="Barre veicoli commerciali"
+          width={400}
+          height={400}
+          className="m-10"
+        />
       </div>
       <div className="flex justify-center">
         <p className="text-sm text-gray-600 italic mb-4">
-        * I kit di fissaggio applicabili vengono indicati in base alle possibili posizioni di montaggio sul veicolo selezionato, come da immagine.
+          * I kit di fissaggio applicabili vengono indicati in base alle
+          possibili posizioni di montaggio sul veicolo selezionato, come da
+          immagine.
         </p>
       </div>
 
-      <ResultsSection results={results} loading={loading} />
+      <ResultsSection
+        results={results}
+        loading={loading}
+        manufacturer={form.manufacturer ?? ""}
+      />
     </div>
   );
 }
