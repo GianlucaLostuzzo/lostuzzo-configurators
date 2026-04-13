@@ -8,7 +8,6 @@ import { usePathname } from "next/navigation";
 
 const PAGE_SIZE = 9;
 const STATIC_URL = process.env.NEXT_PUBLIC_STATIC_URL;
-const DATASHEET_URL = process.env.NEXT_PUBLIC_DATASHEET_URL;
 const DEFAULT_FIXING_IMAGE =
   "https://s3.eu-central-1.amazonaws.com/static.configuratori.cdrtorino.com/ep_professional_bars/fixing.jpg";
 
