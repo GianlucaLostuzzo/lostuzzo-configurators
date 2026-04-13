@@ -200,3 +200,11 @@ model EpProfessionalBars {
 
     @@map("ep_professional_bars")
 }
+
+model EpTechnicalSheets {
+    id          BigInt     @id
+    code        String     @db.VarChar(100)
+    sheet       String     @db.VarChar(100)
+
+    @@map("ep_technical_sheets")
+}
