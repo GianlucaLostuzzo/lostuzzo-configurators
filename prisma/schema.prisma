@@ -117,6 +117,7 @@ model EpRoofBars {
     date_updated DateTime? @db.Timestamp(6)
     updated_by   BigInt?
     img_url      String?   @db.Text
+    priority     BigInt?
 
     @@map("ep_roof_bars")
 }
