@@ -24,7 +24,22 @@ export default function ResultsSection(props: ResultsSectionProps) {
   const { loading = false, results } = props;
   const [visibleCount, setVisibleCount] = useState(PAGE_SIZE);
   const pathname = usePathname();
-  const showDatasheet = pathname === "/roof-bars" || pathname === "/car-trunks"; // o qualunque sia il path
+  const showDatasheet = pathname === "/roof-bars" || pathname === "/car-trunks";
+
+  const sortedData = results?.data
+    ? [...results.data].sort((a, b) => {
+        const aPriority = a.priority;
+        const bPriority = b.priority;
+
+        if (!aPriority && !bPriority) return a.product_code.localeCompare(b.product_code);
+        if (!aPriority) return 1;
+        if (!bPriority) return -1;
+
+        if (aPriority !== bPriority) return aPriority - bPriority;
+
+        return a.product_code.localeCompare(b.product_code);
+      })
+    : [];
 
   if (!results) {
     return <></>;
@@ -45,10 +60,10 @@ export default function ResultsSection(props: ResultsSectionProps) {
       <h2 className="text-2xl font-bold text-center text-primary mb-6">
         Risultati
       </h2>
-      {results.data.length > 0 ? (
+      {sortedData.length > 0 ? (
         <>
           <div className="mt-4 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {results.data.slice(0, visibleCount).map((product, i) => (
+            {sortedData.slice(0, visibleCount).map((product, i) => (
               <div
                 key={`result_${product.product_code}_${i}`}
                 className="bg-white shadow-lg rounded-lg overflow-hidden transition-transform transform border hover:scale-105"
@@ -80,9 +95,12 @@ export default function ResultsSection(props: ResultsSectionProps) {
                     Copia codice
                   </button>
                   {showDatasheet && (
-                    <a 
-                      className = "mt-2 text-gray-500 hover:text-primary focus:outline-none flex items-center justify-center gap-2 border px-4 py-2 rounded-md w-full"
-                      href={getDatasheetUrl(product.product_code)} target="_blank" rel="noopener noreferrer">
+                    <a
+                      className="mt-2 text-gray-500 hover:text-primary focus:outline-none flex items-center justify-center gap-2 border px-4 py-2 rounded-md w-full"
+                      href={getDatasheetUrl(product.product_code)}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
                       <CiSettings size={22} />
                       Scheda tecnica
                     </a>
@@ -91,7 +109,7 @@ export default function ResultsSection(props: ResultsSectionProps) {
               </div>
             ))}
           </div>
-          {visibleCount < results.data.length && (
+          {visibleCount < sortedData.length && (
             <div className="flex justify-center mt-6">
               <button
                 onClick={handleLoadMore}

@@ -35,6 +35,7 @@ export async function GET(request: Request) {
       description: true,
       img_url: true,
       manufacter: true,
+      priority: true,
     },
     distinct: ["code"],
     orderBy: { code: "asc" },
@@ -58,6 +59,7 @@ export async function GET(request: Request) {
           description: r.description,
           manufacter: r.manufacter,
           image: r.img_url ?? `ep_roof_bars/${r.code}.jpg`,
+          priority: r.priority,
         })),
       }),
       {

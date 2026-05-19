@@ -10,6 +10,7 @@ export type ApiProductResult = {
       code: string;
       type: number;
     }>;
+    priority?: number | null;
   }[];
 };
 
